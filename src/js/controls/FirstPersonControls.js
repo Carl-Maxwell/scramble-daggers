@@ -60,9 +60,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.viewHalfY = 0;
 
 	if ( this.domElement !== document ) {
-
 		this.domElement.setAttribute( 'tabindex', -1 );
-
 	}
 
 	//
@@ -70,15 +68,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.handleResize = function () {
 
 		if ( this.domElement === document ) {
-
 			this.viewHalfX = window.innerWidth / 2;
 			this.viewHalfY = window.innerHeight / 2;
-
 		} else {
-
 			this.viewHalfX = this.domElement.offsetWidth / 2;
 			this.viewHalfY = this.domElement.offsetHeight / 2;
-
 		}
 
 	};

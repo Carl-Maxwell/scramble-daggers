@@ -2,6 +2,8 @@
 
 function generateHeight( width, height ) {
 
+	/*
+	
 	var data = [], perlin = new ImprovedNoise(),
 	size = width * height, quality = 2, z = Math.random() * 100;
 
@@ -17,15 +19,16 @@ function generateHeight( width, height ) {
 		quality *= 4
 
 	}
+	*/
 	
 	var Agent = function() {
 
 		var BLOCK_SIZE = 1,
 		    WIDTH      = worldWidth,
 		    HEIGHT     = worldDepth;
-		    
+		
 		this.map = [];
-		    
+		
 		for (var i = 0; i < WIDTH * HEIGHT; i++) this.map[i] = 0;
 
 		this.chances = [500, 500, 500, 500];
@@ -77,7 +80,7 @@ function generateHeight( width, height ) {
 			}
 
 			var round  = Math.round ,
-				random = Math.random;
+			    random = Math.random;
 
 			this.map[ entity_key ] = 60 || round( (248 - this.map[ entity_key ]) * 0.01 );
 
@@ -101,10 +104,10 @@ function generateHeight( width, height ) {
 			
 				var x = i % WIDTH,
 				    y = (i-x)/WIDTH;
-			
-				square(x - WIDTH / 2) + square(y - HEIGHT/2)
-			
-				this.map[i] =  this.map[i] || max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
+				
+				square(x - WIDTH / 2) + square(y - HEIGHT/2);
+				
+				this.map[i] =  this.map[i] || 65; //max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
 				//round( sin( abs((x - WIDTH/2) / (WIDTH/2) ) * abs((y - HEIGHT/2) / (HEIGHT/2)) * (PI/2) ) * 60 );
 				
 			}
