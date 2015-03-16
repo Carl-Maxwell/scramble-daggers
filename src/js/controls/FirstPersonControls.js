@@ -13,8 +13,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	    sin    = Math.sin,
 	    cos    = Math.cos,
 	    abs    = Math.abs,
-			sqrt   = Math.sqrt,
-			square = function(a) { return a*a; };
+	    sqrt   = Math.sqrt,
+	    square = function(a) { return a*a; };
 
 	this.object = object;
 	this.target = new THREE.Vector3( 0, 0, 0 );
@@ -169,9 +169,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var isValid = function(xChange, yChange, zChange) {
 			var round = Math.round,
 			    abs   = Math.abs;
-			//typeof xChange == "undefined" ? xChange = 0 : '';
-			//typeof yChange == "undefined" ? yChange = 0 : '';
-			//typeof zChange == "undefined" ? zChange = 0 : '';
 
 			return true;
 
@@ -186,13 +183,9 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			) < round(position.y/100)+1;
 		};
 
-		//console.log(this.velocity);
-
 		this.velocity.x = decelerateSpeed(this.velocity.x);
 		this.velocity.y = decelerateSpeed(this.velocity.y);
 		this.velocity.z = decelerateSpeed(this.velocity.z);
-
-		//console.log(this.velocity);
 
 		if ( this.moveForward  && !this.moveBackward ) this.velocity.z  = -moveSpeed(this.moveForward );
 		if ( this.moveBackward && !this.moveForward  ) this.velocity.z  =  moveSpeed(this.moveBackward);
@@ -204,10 +197,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//if ( this.moveDown    && !this.moveUp        )  this.velocity.y = -moveSpeed(this.moveDown    );
 
 		if (isValid.apply(this, [this.velocity.x, this.velocity.y, this.velocity.z])) {
-			//this.object.translateZ( this.velocity.z * delta );
-			//this.object.translateX( this.velocity.x * delta );
-			//this.object.translateY( this.velocity.y * delta );
-
 			var theta = THREE.Math.degToRad(this.mouseX);
 
 			var radius = sqrt( square(this.velocity.x) + square(this.velocity.z) );
@@ -220,12 +209,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			var yaw   = this.object.rotation.x,
 			    pitch = this.object.rotation.z;
 
-			//this.object.position.x += 1 * Math.sin( pitch ) * Math.cos( yaw );
-			//this.object.position.z += 1 * Math.sin( pitch ) * Math.sin( yaw );
-
 		}
-
-		//console.log( { x: this.velocity.x * delta, z: this.velocity.z * delta } )
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
@@ -235,9 +219,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		if ( this.constrainVertical )
 			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
-
-		//while (abs(this.mouseX) > 180)
-		//	this.mouseX -= (this.mouseX > 0 ? 180 : -180);
 
 		this.lon = this.mouseX; //+= this.mouseX * actualLookSpeed;
 		if( this.lookVertical ) this.lat = -this.mouseY; //-= this.mouseY * actualLookSpeed * verticalLookRatio;
@@ -251,11 +232,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
 
 		var targetPosition = this.target;
-
-		//while (this.theta > Math.PI) this.theta -= Math.PI;
-
-		//position.x += -sin( -this.theta );
-		//position.z +=  cos( -this.theta );
 
 		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
 		targetPosition.y = position.y + 100 * Math.cos( this.phi );
