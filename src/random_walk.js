@@ -43,9 +43,9 @@ function generateHeight( width, height ) {
 			var x = 0, y = 0;
 
 			var chanceSum = this.chances.reduce(function(a, b) { return a + b; } ),
-				valueSum  = 0,
-				that      = this,
-				direction = Math.random() * chanceSum;
+			    valueSum  = 0,
+			    that      = this,
+			    direction = Math.random() * chanceSum;
 
 			if (this.mode == -1 && chanceSum == 4) {
 				this.mode = 1;
@@ -56,7 +56,6 @@ function generateHeight( width, height ) {
 			}
 
 			this.chances.forEach(function(value, key) {
-
 				if (typeof direction == "number" && direction < (value + valueSum)) {
 					direction = false;
 					this.chances[ key ] = Math.max(1, this.chances[ key ] + this.mode);
@@ -82,7 +81,7 @@ function generateHeight( width, height ) {
 			var round  = Math.round ,
 			    random = Math.random;
 
-			this.map[ entity_key ] = 60 || round( (248 - this.map[ entity_key ]) * 0.01 );
+			this.map[ entity_key ] = 60; //|| round( (248 - this.map[ entity_key ]) * 0.01 );
 
 //						entities[ entity_key ].sprite.color[0] += round( (248 - rgb[0]) * 0.2 );
 //						entities[ entity_key ].sprite.color[1] += round( (187 - rgb[1]) * 0.2 );
@@ -105,9 +104,17 @@ function generateHeight( width, height ) {
 				var x = i % WIDTH,
 				    y = (i-x)/WIDTH;
 				
-				square(x - WIDTH / 2) + square(y - HEIGHT/2);
+				// var dist = square(x - WIDTH / 2) + square(y - HEIGHT/2);
 				
-				this.map[i] =  this.map[i] || 65; //max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
+				if (this.map[i] == 0) {
+					var any = false;
+					for (var q=-1; q<2; q++)
+						for (var w=-1; w<2; w++)
+							any = any || this.map[i + (q + w*WIDTH)] == 60;
+					this.map[i] = any ? 65 : 70;
+				}
+				
+				// this.map[i] = this.map[i] || max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
 				//round( sin( abs((x - WIDTH/2) / (WIDTH/2) ) * abs((y - HEIGHT/2) / (HEIGHT/2)) * (PI/2) ) * 60 );
 				
 			}
@@ -120,7 +127,7 @@ function generateHeight( width, height ) {
 	var iterations = 6000 + (Math.random() * 2000);
 
 	for (var i = 0; i < iterations; i++)
-		agent.tick(); 
+		agent.tick();
 
 	agent.destroy();
 

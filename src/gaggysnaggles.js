@@ -61,6 +61,9 @@ function init() {
 
 	var groundGeometry = createCube();
 
+	//var modifier = new THREE.SubdivisionModifier( 2 );
+	//modifier.modify(groundGeometry);
+	
 	groundGeometry.mergeVertices();
 	groundGeometry.computeFaceNormals();
 	groundGeometry.computeVertexNormals( true );
@@ -70,6 +73,8 @@ function init() {
 	groundTexture.magFilter = THREE.NearestFilter;
 	groundTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
+	//
+	
 	var ground = new THREE.Mesh(
 		groundGeometry,
 		new THREE.MeshLambertMaterial( { map: groundTexture, ambient: 0xbbbbbb } ) 
@@ -116,12 +121,12 @@ function init() {
 	var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
 	effectFilm.renderToScreen = true;
 
-	var effectBloom = new THREE.BloomPass( 1, 25, 1.99 );
+	//var effectBloom = new THREE.BloomPass( 1, 25, 1.99 );
 
 	var clearMask = new THREE.ClearMaskPass();
 
 	composer.addPass(clearMask);
-	composer.addPass(effectBloom);
+	//composer.addPass(effectBloom);
 	composer.addPass(effectFilm);
 	composer.addPass(noiseFilter);
 	

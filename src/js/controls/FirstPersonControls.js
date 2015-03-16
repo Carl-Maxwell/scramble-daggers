@@ -6,13 +6,15 @@
 
 THREE.FirstPersonControls = function ( object, domElement ) {
 
-	var min   = Math.min,
-	    max   = Math.max,
-	    round = Math.round,
-	    PI    = Math.PI,
-	    sin   = Math.sin,
-	    cos   = Math.cos,
-	    abs   = Math.abs;
+	var min    = Math.min,
+	    max    = Math.max,
+	    round  = Math.round,
+	    PI     = Math.PI,
+	    sin    = Math.sin,
+	    cos    = Math.cos,
+	    abs    = Math.abs,
+			sqrt   = Math.sqrt,
+			square = function(a) { return a*a; };
 
 	this.object = object;
 	this.target = new THREE.Vector3( 0, 0, 0 );
@@ -81,13 +83,13 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var movementX = e.movementX       ||
 		                e.mozMovementX    ||
 		                e.webkitMovementX,
-		
+
 		movementY = e.movementY       ||
 		            e.mozMovementY    ||
 		            e.webkitMovementY;
 
-			this.mouseX += movementX * this.mouseSensitivity;
-			this.mouseY += movementY * this.mouseSensitivity;
+		this.mouseX += movementX * this.mouseSensitivity;
+		this.mouseY += movementY * this.mouseSensitivity;
 	};
 
 	this.onKeyDown = function ( event ) {
@@ -150,20 +152,20 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var moveSpeed = function(timestamp) {
 			if (timestamp == false) return 0;
-		
+
 			return sin(min(3000, (new Date()).getTime() - timestamp)/3000 * (PI/2))*6 * 60;
 		};
-		
+
 		var decelerateSpeed = function(speed) {
 			if (abs(speed) < 0.01) return 0;
-		
+
 			//speed = max(-6, min(6, speed));
-		
+
 			return speed * 0.9;//sin(0.6 * (speed/6) * (PI/2))*6 * 60;
 		};
-		
+
 		//console.log(this.object.rotation);
-		
+
 		var isValid = function(xChange, yChange, zChange) {
 			var round = Math.round,
 			    abs   = Math.abs;
@@ -202,11 +204,21 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//if ( this.moveDown    && !this.moveUp        )  this.velocity.y = -moveSpeed(this.moveDown    );
 
 		if (isValid.apply(this, [this.velocity.x, this.velocity.y, this.velocity.z])) {
-			this.object.translateZ( this.velocity.z * delta );
-			this.object.translateX( this.velocity.x * delta );
-			//this.object.translateY( this.velocity.y * delta);//this is redundant
+			//this.object.translateZ( this.velocity.z * delta );
+			//this.object.translateX( this.velocity.x * delta );
+			//this.object.translateY( this.velocity.y * delta );
 
-			var yaw = this.object.rotation.x, pitch = this.object.rotation.z;
+			var theta = THREE.Math.degToRad(this.mouseX);
+
+			var radius = sqrt( square(this.velocity.x) + square(this.velocity.z) );
+
+			var right_angle = THREE.Math.degToRad(90);
+
+			position.x += (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta;
+			position.z += (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta;
+
+			var yaw   = this.object.rotation.x,
+			    pitch = this.object.rotation.z;
 
 			//this.object.position.x += 1 * Math.sin( pitch ) * Math.cos( yaw );
 			//this.object.position.z += 1 * Math.sin( pitch ) * Math.sin( yaw );
@@ -240,7 +252,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var targetPosition = this.target;
 
-		//while (this.theta > Math.PI) this.theta -= Math.PI; 
+		//while (this.theta > Math.PI) this.theta -= Math.PI;
 
 		//position.x += -sin( -this.theta );
 		//position.z +=  cos( -this.theta );
@@ -250,10 +262,17 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
 
 		this.object.lookAt( targetPosition );
-		
+
 		var round = Math.round;
-	
-		var height = (getY(round(position.x/100 + worldHalfWidth), round(position.z/100 + worldHalfDepth)) + 1) * 100;
+
+		var character_height = 2 + (0.007 * sin((new Date).getTime() * Math.PI / 1000 / 4));
+
+		var height = (
+			getY(
+				round(position.x/100 + worldHalfWidth),
+				round(position.z/100 + worldHalfDepth)
+			) + character_height
+		) * 100;
 
 		//TODO just don't move it on Y to begin with instead of clamping it after moving it
 		this.object.position.y = THREE.Math.clamp( this.object.position.y, height, height );
