@@ -2,8 +2,6 @@
 
 This file was copied from seedrandom.js <https://github.com/davidbau/seedrandom>
 
-it 
-
 LICENSE (MIT)
 -------------
 
@@ -28,60 +26,53 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
 */
 
-/**
- * All code is in an anonymous closure to keep the global namespace clean.
- */
+(function() {
+
+var rng_internal = {};
+
 (function (
-    global, pool, math, width, chunks, digits, module, define, rngname) {
+    global, pool, api, width, chunks, digits, rngname) {
 
 //
 // The following constants are related to IEEE 754 limits.
 //
-var startdenom = math.pow(width, chunks),
-    significance = math.pow(2, digits),
+
+var startdenom = Math.pow(width, chunks),
+    significance = Math.pow(2, digits),
     overflow = significance * 2,
     mask = width - 1,
     nodecrypto;
 
 //
-// seedrandom()
-// This is the seedrandom function described above.
 //
-var impl = math['seed' + rngname] = function(seed, options, callback) {
+//
+
+api.seed = function(seed, options, callback) {
   var key = [];
   options = (options == true) ? { entropy: true } : (options || {});
 
-  // Flatten the seed string or build one from local entropy if needed.
   var shortseed = mixkey(flatten(
-    options.entropy ? [seed, tostring(pool)] :
-    (seed == null) ? autoseed() : seed, 3), key);
+    options.entropy ?
+				[seed, tostring(pool)]
+			:
+				(seed == null) ? autoseed() : seed,
+		3
+	), key);
 
-  // Use the seed to initialize an ARC4 generator.
   var arc4 = new ARC4(key);
 
-  // Mix the randomness into accumulated entropy.
   mixkey(tostring(arc4.S), pool);
 
-  // Calling convention: what to return as a function of prng, seed, is_math.
   return (options.pass || callback ||
-      function(prng, seed, is_math_call, state) {
+      function(prng, seed, state) {
         if (state) {
-          // Load the arc4 state from the given state if it has an S array.
           if (state.S) { copy(state, arc4); }
-          // Only provide the .state method if requested via options.state.
           prng.state = function() { return copy(arc4, {}); }
         }
 
-        // If called as a method of Math (Math.seedrandom()), mutate
-        // Math.random because that is how seedrandom.js has worked since v1.0.
-        if (is_math_call) { math[rngname] = prng; return seed; }
-
-        // Otherwise, it is a newer calling convention, so return the
-        // prng directly.
-        else return prng;
+				api.random = prng;
       })(
 
   // This function returns a random double in [0, 1) that contains
@@ -103,7 +94,6 @@ var impl = math['seed' + rngname] = function(seed, options, callback) {
     return (n + x) / d;                 // Form the number within [0, 1).
   },
   shortseed,
-  'global' in options ? options.global : (this == math),
   options.state);
 };
 
@@ -117,7 +107,7 @@ var impl = math['seed' + rngname] = function(seed, options, callback) {
 // the next (count) outputs from ARC4.  Its return value is a number x
 // that is in the range 0 <= x < (width ^ count).
 //
-/** @constructor */
+
 function ARC4(key) {
   var t, keylen = key.length,
       me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
@@ -136,7 +126,6 @@ function ARC4(key) {
 
   // The "g" method returns the next (count) outputs as one number.
   (me.g = function(count) {
-    // Using instance members instead of closure state nearly doubles speed.
     var t, r = 0,
         i = me.i, j = me.j, s = me.S;
     while (count--) {
@@ -194,7 +183,6 @@ function mixkey(seed, key) {
 // autoseed()
 // Returns an object for autoseeding, using window.crypto if available.
 //
-/** @param {Uint8Array|Navigator=} seed */
 function autoseed(seed) {
   try {
     if (nodecrypto) return tostring(nodecrypto.randomBytes(width));
@@ -206,10 +194,6 @@ function autoseed(seed) {
   }
 }
 
-//
-// tostring()
-// Converts an array of charcodes to a string
-//
 function tostring(a) {
   return String.fromCharCode.apply(0, a);
 }
@@ -221,35 +205,33 @@ function tostring(a) {
 // seedrandom will not call math.random on its own again after
 // initialization.
 //
-mixkey(math[rngname](), pool);
+mixkey(Math.random(), pool);
 
-//
-// Nodejs and AMD support: export the implementation as a module using
-// either convention.
-//
-if (module && module.exports) {
-  module.exports = impl;
-  try {
-    // When in node.js, try using crypto package for autoseeding.
-    nodecrypto = require('crypto');
-  } catch (ex) {}
-} else if (define && define.amd) {
-  define(function() { return impl; });
-}
-
-//
-// Node.js native crypto support.
-//
-
-// End anonymous scope, and pass initial values.
 })(
   this,   // global window object
   [],     // pool: entropy pool starts empty
-  Math,   // math: package containing random, pow, and seedrandom
+  rng_internal,
   256,    // width: each RC4 output is 0 <= x < 256
   6,      // chunks: at least six RC4 outputs for each double
   52,     // digits: there are 52 significant digits in a double
-  (typeof module) == 'object' && module,    // present in node.js
-  (typeof define) == 'function' && define,  // present with an AMD loader
   'random'// rngname: name for Math.random and Math.seedrandom
 );
+
+window.Rng = function() {
+	return rng_internal.random();
+};
+
+Rng.seed = function(new_seed) {
+	rng_internal.seed(new_seed);
+	
+	this.current_seed = new_seed;
+};
+
+Rng.seed((new Date).getTime());
+
+// So to use Rng just do Rng() & it'll return a [0, 1) decimal
+
+
+// TODO add Rng.clone & a way to grab the current state
+
+})();

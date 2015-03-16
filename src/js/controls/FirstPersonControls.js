@@ -5,17 +5,6 @@
  */
 
 THREE.FirstPersonControls = function ( object, domElement ) {
-
-	var min    = Math.min,
-	    max    = Math.max,
-	    round  = Math.round,
-	    PI     = Math.PI,
-	    sin    = Math.sin,
-	    cos    = Math.cos,
-	    abs    = Math.abs,
-	    sqrt   = Math.sqrt,
-	    square = function(a) { return a*a; };
-
 	this.object = object;
 	this.target = new THREE.Vector3( 0, 0, 0 );
 
@@ -167,13 +156,10 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//console.log(this.object.rotation);
 
 		var isValid = function(xChange, yChange, zChange) {
-			var round = Math.round,
-			    abs   = Math.abs;
-
 			return true;
 
-			var x = position.x + 100 * Math.sin( this.object.rotation.z ) * Math.cos( this.object.rotation.x ),
-			    z = position.z + 100 * Math.sin( this.object.rotation.z ) * Math.sin( this.object.rotation.x );
+			var x = position.x + 100 * sin( this.object.rotation.z ) * cos( this.object.rotation.x ),
+			    z = position.z + 100 * sin( this.object.rotation.z ) * sin( this.object.rotation.x );
 
 			return round(
 				getY(
@@ -199,7 +185,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if (isValid.apply(this, [this.velocity.x, this.velocity.y, this.velocity.z])) {
 			var theta = THREE.Math.degToRad(this.mouseX);
 
-			var radius = sqrt( square(this.velocity.x) + square(this.velocity.z) );
+			var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
 
 			var right_angle = THREE.Math.degToRad(90);
 
@@ -218,12 +204,12 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var verticalLookRatio = 1;
 
 		if ( this.constrainVertical )
-			verticalLookRatio = Math.PI / ( this.verticalMax - this.verticalMin );
+			verticalLookRatio = PI / ( this.verticalMax - this.verticalMin );
 
 		this.lon = this.mouseX; //+= this.mouseX * actualLookSpeed;
 		if( this.lookVertical ) this.lat = -this.mouseY; //-= this.mouseY * actualLookSpeed * verticalLookRatio;
 
-		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
+		this.lat = max( - 85, min( 85, this.lat ) );
 		this.phi = THREE.Math.degToRad( 90 - this.lat );
 
 		this.theta = THREE.Math.degToRad( this.lon );
@@ -233,15 +219,13 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var targetPosition = this.target;
 
-		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
-		targetPosition.y = position.y + 100 * Math.cos( this.phi );
-		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+		targetPosition.x = position.x + 100 * sin( this.phi ) * cos( this.theta );
+		targetPosition.y = position.y + 100 * cos( this.phi );
+		targetPosition.z = position.z + 100 * sin( this.phi ) * sin( this.theta );
 
 		this.object.lookAt( targetPosition );
 
-		var round = Math.round;
-
-		var character_height = 2 + (0.007 * sin((new Date).getTime() * Math.PI / 1000 / 4));
+		var character_height = 2 + (0.007 * sin((new Date).getTime() * PI / 1000 / 4));
 
 		var height = (
 			getY(

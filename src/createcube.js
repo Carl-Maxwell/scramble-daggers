@@ -8,25 +8,25 @@ function createCube() {
 	var pxGeometry = new THREE.PlaneGeometry( 100, 100 );
 	pxGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
 	pxGeometry.faceVertexUvs[ 0 ][ 0 ][ 3 ].y = 0.5;
-	pxGeometry.applyMatrix( matrix.makeRotationY( Math.PI / 2 ) );
+	pxGeometry.applyMatrix( matrix.makeRotationY( PI / 2 ) );
 	pxGeometry.applyMatrix( matrix.makeTranslation( 50, 0, 0 ) );
 
 	var nxGeometry = new THREE.PlaneGeometry( 100, 100 );
 	nxGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
 	nxGeometry.faceVertexUvs[ 0 ][ 0 ][ 3 ].y = 0.5;
-	nxGeometry.applyMatrix( matrix.makeRotationY( - Math.PI / 2 ) );
+	nxGeometry.applyMatrix( matrix.makeRotationY( - PI / 2 ) );
 	nxGeometry.applyMatrix( matrix.makeTranslation( - 50, 0, 0 ) );
 
 	var pyGeometry = new THREE.PlaneGeometry( 100, 100 );
 	pyGeometry.faceVertexUvs[ 0 ][ 0 ][ 1 ].y = 0.5;
 	pyGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-	pyGeometry.applyMatrix( matrix.makeRotationX( - Math.PI / 2 ) );
+	pyGeometry.applyMatrix( matrix.makeRotationX( - PI / 2 ) );
 	pyGeometry.applyMatrix( matrix.makeTranslation( 0, 50, 0 ) );
 	
 	var nyGeometry = new THREE.PlaneGeometry( 100, 100 );
 	nyGeometry.faceVertexUvs[ 0 ][ 0 ][ 1 ].y = 0.5;
 	nyGeometry.faceVertexUvs[ 0 ][ 0 ][ 2 ].y = 0.5;
-	nyGeometry.applyMatrix( matrix.makeRotationX( Math.PI / 2 ) );
+	nyGeometry.applyMatrix( matrix.makeRotationX( PI / 2 ) );
 	nyGeometry.applyMatrix( matrix.makeTranslation( 0, -50, 0 ) );
 
 	var pzGeometry = new THREE.PlaneGeometry( 100, 100 );
@@ -37,7 +37,7 @@ function createCube() {
 	var nzGeometry = new THREE.PlaneGeometry( 100, 100 );
 	nzGeometry.faceVertexUvs[ 0 ][ 0 ][ 0 ].y = 0.5;
 	nzGeometry.faceVertexUvs[ 0 ][ 0 ][ 3 ].y = 0.5;
-	nzGeometry.applyMatrix( matrix.makeRotationY( Math.PI ) );
+	nzGeometry.applyMatrix( matrix.makeRotationY( PI ) );
 	nzGeometry.applyMatrix( matrix.makeTranslation( 0, 0, -50 ) );
 
 	var outputGeometry = new THREE.Geometry();
