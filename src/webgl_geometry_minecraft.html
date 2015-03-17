@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+        <script type='text/javascript' id='lt_ws' src='http://localhost:52843/socket.io/lighttable/ws.js'></script>
 		<title>Gaggysnaggles</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -105,21 +106,31 @@
 		<script src="js/postprocessing/ShaderPass.js"></script>
 
 		<!--- monkeypatching & stuff --->
-		
+
 		<script src="monkeypatchs/monkeypatch.js"></script>
 		<script src="monkeypatchs/import.js"></script>
 		<script src="monkeypatchs/shuffle.js"></script>
-		
-		<!--- Sa engine stuff --->
-		
-		<script src="rng.js"></script>
-		
+		<script src="monkeypatchs/range.js"></script>
+        <script src="monkeypatchs/vector.js"></script>
+
+		<!--- Core Sa engine stuff --->
+
+		<script src="core/rng.js"></script>
+		<script src="core/fate.js"></script>
+		<script src="core/hinge.js"></script>
+		<script src="core/lineTrace.js"></script>
+
 		<!--- Gaggysnaggle stuff --->
-		
+
 		<script src="random_walk.js"></script>
 		<script src="createcube.js"></script>
 		<script src="gaggysnaggles.js"></script>
 		<script src="pointerlock.js"></script>
+
+		<!--- Test Stuff --->
+
+		<script src="../test/testFramework.js"></script>
+		<script src="../test/rng.js"></script>
 
 	</body>
 </html>

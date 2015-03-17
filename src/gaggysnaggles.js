@@ -15,14 +15,27 @@ var camera, controls, scene, renderer;
 
 var mesh;
 
-var worldWidth = 128, worldDepth = 128,
-worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2,
+window.worldWidth = 128;
+window.worldDepth = 128,
+window.worldHalfWidth = worldWidth / 2;
+window.worldHalfDepth = worldDepth / 2;
 
 //
 // procedurally generate map
 //
 
-data = generateHeight( worldWidth, worldDepth );
+// TODO should map be capitalized?
+
+window.map = window.map || {};
+
+map.heightmap = generateHeight( worldWidth, worldDepth );
+
+map.getHeight = function(x, z) {
+  // why is this being multiplied by 0.2?
+
+	return (map.heightmap[x + z * worldWidth] * 0.2) | 0;
+}
+
 
 //
 // initialize stuff
@@ -41,7 +54,7 @@ function init() {
 	container = document.getElementById( 'container' );
 
 	camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 20000 );
-	camera.position.y = getY( worldHalfWidth, worldHalfDepth ) * 100 + 100;
+	camera.position.y = map.getHeight( worldHalfWidth, worldHalfDepth ) * h("1 block") + h("1 block");
 
 	controls = new THREE.FirstPersonControls( camera );
 
@@ -61,23 +74,18 @@ function init() {
 
 	var groundGeometry = createCube();
 
-	//var modifier = new THREE.SubdivisionModifier( 2 );
-	//modifier.modify(groundGeometry);
-	
 	groundGeometry.mergeVertices();
 	groundGeometry.computeFaceNormals();
 	groundGeometry.computeVertexNormals( true );
 
 	var groundTexture = THREE.ImageUtils.loadTexture( 'textures/swirl/atlas.png' );
-	
-	groundTexture.magFilter = THREE.NearestFilter;
-	groundTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
-	//
-	
+	groundTexture.magFilter = THREE.NearestFilter;
+
+
 	var ground = new THREE.Mesh(
 		groundGeometry,
-		new THREE.MeshLambertMaterial( { map: groundTexture, ambient: 0xbbbbbb } ) 
+		new THREE.MeshPhongMaterial( { map: groundTexture, ambient: 0xbbbbbb } )
 	);
 
 	scene.add( ground );
@@ -115,6 +123,15 @@ function init() {
 	//var effectFilm = new THREE.FilmPass( 0.2, 0, 2048, false );
 	//effectFilm.renderToScreen = true;
 
+	var dpr = 1;
+	if (window.devicePixelRatio !== undefined) {
+		dpr = window.devicePixelRatio;
+	}
+
+	var fxaaFilter = new THREE.ShaderPass( THREE.FXAAShader );
+	fxaaFilter.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
+	fxaaFilter.renderToScreen = true;
+
 	var noiseFilter = new THREE.ShaderPass( THREE.RGBShiftShader );
 	noiseFilter.uniforms[ 'amount' ].value = 0.0015;
 
@@ -125,11 +142,12 @@ function init() {
 
 	var clearMask = new THREE.ClearMaskPass();
 
-	composer.addPass(clearMask);
+	//composer.addPass(clearMask);
 	//composer.addPass(effectBloom);
+	//composer.addPass(fxaaFilter);
 	composer.addPass(effectFilm);
-	composer.addPass(noiseFilter);
-	
+	//composer.addPass(noiseFilter);
+
 
 	//handle window resizing
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -142,12 +160,6 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
 	controls.handleResize();
-}
-
-function getY( x, z ) {
-	typeof window.xs == "undefined" ? window.xs = [x] : window.xs.push(x);
-
-	return ( data[ x + z * worldWidth ] * 0.2 ) | 0;
 }
 
 function animate() {

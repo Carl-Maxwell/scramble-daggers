@@ -2,7 +2,8 @@
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
  * @author paulirish / http://paulirish.com/
- */
+ * @author modred11
+*/
 
 THREE.FirstPersonControls = function ( object, domElement ) {
 	this.object = object;
@@ -142,7 +143,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var moveSpeed = function(timestamp) {
 			if (timestamp == false) return 0;
 
-			return sin(min(3000, (new Date()).getTime() - timestamp)/3000 * (PI/2))*6 * 60;
+      return sin(min(3000, (new Date()).getTime() - timestamp)/3000 * (PI/2)) * h("1 seconds walk");
 		};
 
 		var decelerateSpeed = function(speed) {
@@ -153,20 +154,18 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			return speed * 0.9;//sin(0.6 * (speed/6) * (PI/2))*6 * 60;
 		};
 
-		//console.log(this.object.rotation);
-
 		var isValid = function(xChange, yChange, zChange) {
 			return true;
 
-			var x = position.x + 100 * sin( this.object.rotation.z ) * cos( this.object.rotation.x ),
-			    z = position.z + 100 * sin( this.object.rotation.z ) * sin( this.object.rotation.x );
+			var x = position.x + h("1 block") * sin( this.object.rotation.z ) * cos( this.object.rotation.x ),
+			    z = position.z + h("1 block") * sin( this.object.rotation.z ) * sin( this.object.rotation.x );
 
 			return round(
-				getY(
-					round(x / 100 + worldHalfWidth) ,
-					round(z / 100 + worldHalfDepth)
+				map.getHeight(
+					round(x / h("1 block") + worldHalfWidth) ,
+					round(z / h("1 block") + worldHalfDepth)
 				)
-			) < round(position.y/100)+1;
+			) < round(position.y/h("1 block"))+1;
 		};
 
 		this.velocity.x = decelerateSpeed(this.velocity.x);
@@ -206,8 +205,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if ( this.constrainVertical )
 			verticalLookRatio = PI / ( this.verticalMax - this.verticalMin );
 
-		this.lon = this.mouseX; //+= this.mouseX * actualLookSpeed;
-		if( this.lookVertical ) this.lat = -this.mouseY; //-= this.mouseY * actualLookSpeed * verticalLookRatio;
+		this.lon = this.mouseX;
+		if( this.lookVertical ) this.lat = -this.mouseY;
 
 		this.lat = max( - 85, min( 85, this.lat ) );
 		this.phi = THREE.Math.degToRad( 90 - this.lat );
@@ -219,20 +218,20 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var targetPosition = this.target;
 
-		targetPosition.x = position.x + 100 * sin( this.phi ) * cos( this.theta );
-		targetPosition.y = position.y + 100 * cos( this.phi );
-		targetPosition.z = position.z + 100 * sin( this.phi ) * sin( this.theta );
+		targetPosition.x = position.x + h("1 block") * sin( this.phi ) * cos( this.theta );
+		targetPosition.y = position.y + h("1 block") * cos( this.phi );
+		targetPosition.z = position.z + h("1 block") * sin( this.phi ) * sin( this.theta );
 
 		this.object.lookAt( targetPosition );
 
 		var character_height = 2 + (0.007 * sin((new Date).getTime() * PI / 1000 / 4));
 
 		var height = (
-			getY(
-				round(position.x/100 + worldHalfWidth),
-				round(position.z/100 + worldHalfDepth)
+			map.getHeight(
+				round(position.x/h("1 block") + worldHalfWidth),
+				round(position.z/h("1 block") + worldHalfDepth)
 			) + character_height
-		) * 100;
+		) * h("1 block");
 
 		//TODO just don't move it on Y to begin with instead of clamping it after moving it
 		this.object.position.y = THREE.Math.clamp( this.object.position.y, height, height );
