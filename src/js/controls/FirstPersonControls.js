@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
  * @author paulirish / http://paulirish.com/
- * @author modred11
+ * @author Carl Maxwell
 */
 
 THREE.FirstPersonControls = function ( object, domElement ) {
@@ -143,6 +143,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var moveSpeed = function(timestamp) {
 			if (timestamp == false) return 0;
 
+      if (lineTrace(position.clone().sub(new Vector3(0, character_height, 0)), (new Vector3(1, 0, 0)).multiply(h("1 block")))) {
+        console.log("YO WE HIT GROUND YO");
+        return 0;
+      }
+
       return sin(min(3000, (new Date()).getTime() - timestamp)/3000 * (PI/2)) * h("1 seconds walk");
 		};
 
@@ -160,12 +165,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			var x = position.x + h("1 block") * sin( this.object.rotation.z ) * cos( this.object.rotation.x ),
 			    z = position.z + h("1 block") * sin( this.object.rotation.z ) * sin( this.object.rotation.x );
 
-			return round(
-				map.getHeight(
-					round(x / h("1 block") + worldHalfWidth) ,
-					round(z / h("1 block") + worldHalfDepth)
-				)
-			) < round(position.y/h("1 block"))+1;
+			return map.getHeight(x, z) < round(position.y/h("1 block"))+1;
 		};
 
 		this.velocity.x = decelerateSpeed(this.velocity.x);
@@ -182,7 +182,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//if ( this.moveDown    && !this.moveUp        )  this.velocity.y = -moveSpeed(this.moveDown    );
 
 		if (isValid.apply(this, [this.velocity.x, this.velocity.y, this.velocity.z])) {
-			var theta = THREE.Math.degToRad(this.mouseX);
+      // TODO I'd feel better if this used this.object.rotation.x or the like instead of mouse position
+      var theta = THREE.Math.degToRad(this.mouseX);
 
 			var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
 
@@ -190,10 +191,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			position.x += (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta;
 			position.z += (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta;
-
-			var yaw   = this.object.rotation.x,
-			    pitch = this.object.rotation.z;
-
 		}
 
 		var actualLookSpeed = delta * this.lookSpeed;
@@ -224,18 +221,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		this.object.lookAt( targetPosition );
 
-		var character_height = 2 + (0.007 * sin((new Date).getTime() * PI / 1000 / 4));
+    var breath = (0.007 * sin((new Date).getTime() * PI / 1000 / 4));
 
-		var height = (
-			map.getHeight(
-				round(position.x/h("1 block") + worldHalfWidth),
-				round(position.z/h("1 block") + worldHalfDepth)
-			) + character_height
-		) * h("1 block");
+		var verticalPosition = (map.getHeight(position.x, position.z) + character_height + breath);
 
-		//TODO just don't move it on Y to begin with instead of clamping it after moving it
-		this.object.position.y = THREE.Math.clamp( this.object.position.y, height, height );
-
+		this.object.position.y = verticalPosition;
 	};
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );

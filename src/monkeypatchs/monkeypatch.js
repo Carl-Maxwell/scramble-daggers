@@ -4,7 +4,7 @@
 
 window.monkeypatch = function(obj, key, patch) {
 	// snatched this code from MDN. Like a ninja.
-	
+
 	function withValue(value) {
 		var d = withValue.d || (
 			withValue.d = {
@@ -17,7 +17,7 @@ window.monkeypatch = function(obj, key, patch) {
 		d.value = value;
 		return d;
 	}
-	
+
 	Object.defineProperty(obj, key, withValue(patch));
 };
 

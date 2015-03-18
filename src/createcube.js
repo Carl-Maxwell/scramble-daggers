@@ -47,16 +47,16 @@ function createCube() {
 
 		for ( var x = 0; x < worldWidth; x ++ ) {
 
-			var h = map.getHeight( x, z );
+			var tallness = map.getHeight_internal( x, z );
 
-			dummy.position.x = x * 100 - worldHalfWidth * 100;
-			dummy.position.y = h * 100;
-			dummy.position.z = z * 100 - worldHalfDepth * 100;
+			dummy.position.x = x        * 100 - worldHalfWidth * 100;
+			dummy.position.y = tallness * 100;
+			dummy.position.z = z        * 100 - worldHalfDepth * 100;
 
-			var px = map.getHeight( x + 1, z );
-			var nx = map.getHeight( x - 1, z );
-			var pz = map.getHeight( x, z + 1 );
-			var nz = map.getHeight( x, z - 1 );
+			var px = map.getHeight_internal( x + 1, z );
+			var nx = map.getHeight_internal( x - 1, z );
+			var pz = map.getHeight_internal( x, z + 1 );
+			var nz = map.getHeight_internal( x, z - 1 );
 
 			var mergeGeometries = function(pnGeometry) {
 				dummy.geometry = pnGeometry;
@@ -66,16 +66,16 @@ function createCube() {
 			mergeGeometries(pyGeometry);
 			mergeGeometries(nyGeometry);
 
-			//if ( ( px != h && px != h + 1 ) || x == 0 )
+			//if ( ( px != tallness && px != tallness + 1 ) || x == 0 )
 				mergeGeometries(pxGeometry);
 
-			//if ( ( nx != h && nx != h + 1 ) || x == worldWidth - 1 )
+			//if ( ( nx != tallness && nx != tallness + 1 ) || x == worldWidth - 1 )
 				mergeGeometries(nxGeometry);
 
-			//if ( ( pz != h && pz != h + 1 ) || z == worldDepth - 1 )
+			//if ( ( pz != talness && pz != talness + 1 ) || z == worldDepth - 1 )
 				mergeGeometries(pzGeometry);
 
-			//if ( ( nz != h && nz != h + 1 ) || z == 0 )
+			//if ( ( nz != tallness && nz != tallness + 1 ) || z == 0 )
 				mergeGeometries(nzGeometry);
 
 		}

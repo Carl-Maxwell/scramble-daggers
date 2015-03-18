@@ -20,6 +20,8 @@ window.worldDepth = 128,
 window.worldHalfWidth = worldWidth / 2;
 window.worldHalfDepth = worldDepth / 2;
 
+window.character_height = h("2 blocks");
+
 //
 // procedurally generate map
 //
@@ -31,11 +33,17 @@ window.map = window.map || {};
 map.heightmap = generateHeight( worldWidth, worldDepth );
 
 map.getHeight = function(x, z) {
-  // why is this being multiplied by 0.2?
+  x = round(x/h("1 block") + worldHalfWidth);
+  z = round(z/h("1 block") + worldHalfDepth);
 
-	return (map.heightmap[x + z * worldWidth] * 0.2) | 0;
+  // TODO why is this being multiplied by 0.2?
+
+	return ((map.heightmap[x + z * worldWidth] * 0.2) | 0) * h("1 block");
 }
 
+map.getHeight_internal = function(x, z) {
+	return (map.heightmap[x + z * worldWidth] * 0.2) | 0;
+}
 
 //
 // initialize stuff
@@ -54,7 +62,8 @@ function init() {
 	container = document.getElementById( 'container' );
 
 	camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 20000 );
-	camera.position.y = map.getHeight( worldHalfWidth, worldHalfDepth ) * h("1 block") + h("1 block");
+  //camera.position.y = map.getHeight( worldHalfWidth, worldHalfDepth ) * h("1 block") + h("1 block");
+  camera.position.y = map.getHeight( 0, 0 ) * h("1 block") + h("5 blocks");
 
 	controls = new THREE.FirstPersonControls( camera );
 
