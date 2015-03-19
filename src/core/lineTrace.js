@@ -23,8 +23,6 @@ window.lineTrace = function() {
   return false;
 };
 
-// TODO should check whether it hits the ground
-// TODO should check whether it hits a wall
 // TODO should check whether it hits an entity
 // TODO this should return a reference to the thing it hit
 // TODO also it should return a whole object of information, hit normal, etc

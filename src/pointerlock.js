@@ -37,9 +37,7 @@
 	function pointerLockChange() {
 	  if (document.mozPointerLockElement === elem ||
 		  document.webkitPointerLockElement === elem) {
-		console.log("Pointer Lock was successful.");
 	  } else {
-		console.log("Pointer Lock was lost.");
 	  }
 	}
 

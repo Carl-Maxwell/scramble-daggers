@@ -63,7 +63,7 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 20000 );
   //camera.position.y = map.getHeight( worldHalfWidth, worldHalfDepth ) * h("1 block") + h("1 block");
-  camera.position.y = map.getHeight( 0, 0 ) * h("1 block") + h("5 blocks");
+  camera.position.y = map.getHeight( 0, 0 ) + h("5 blocks");
 
 	controls = new THREE.FirstPersonControls( camera );
 

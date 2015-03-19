@@ -43,6 +43,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.moveLeft     = false;
 	this.moveRight    = false;
 	this.freeze       = false;
+  this.jump         = false;
+  this.canJump      = true;
 
 	this.velocity = new Vector3; //{x: 0, y: 0, z: 0};
 
@@ -103,6 +105,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			case 70: /*F*/ this.moveDown = this.moveDown || t; break;
 
 			case 81: /*Q*/ this.freeze = !this.freeze; break;
+
+      case 32: /*space*/ this.jump = this.canJump; break;
 		}
 	};
 
@@ -122,6 +126,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 82: /*R*/ this.moveUp = false; break;
 			case 70: /*F*/ this.moveDown = false; break;
+
+      case 32: /*space*/ this.jump = false; break;
 		}
 	};
 
@@ -155,7 +161,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		};
 
 		this.velocity.x = decelerateSpeed(this.velocity.x);
-		this.velocity.y = decelerateSpeed(this.velocity.y);
 		this.velocity.z = decelerateSpeed(this.velocity.z);
 
 		if ( this.moveForward  && !this.moveBackward ) this.velocity.z  = -moveSpeed(this.moveForward );
@@ -163,9 +168,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		if ( this.moveLeft    && !this.moveRight     )  this.velocity.x = -moveSpeed(this.moveLeft    );
 		if ( this.moveRight   && !this.moveLeft      )  this.velocity.x =  moveSpeed(this.moveRight   );
-
-		//if ( this.moveUp      && !this.moveDown      )  this.velocity.y =  moveSpeed(this.moveUp      );
-		//if ( this.moveDown    && !this.moveUp        )  this.velocity.y = -moveSpeed(this.moveDown    );
 
     //
     // check for collisions
@@ -191,9 +193,10 @@ THREE.FirstPersonControls = function ( object, domElement ) {
       );
     };
 
-    if (check(forward)) { //check(forward) || check(backward) || check(right) || check(left)
-      console.log("YO WE HIT GROUND YO");
-      impulse = new Vector3(0,0,0);
+    // TODO allow sliding collisions
+
+    if (check(forward)) {
+      impulse = new Vector3(0, 0, 0);
     }
 
     //
@@ -205,6 +208,10 @@ THREE.FirstPersonControls = function ( object, domElement ) {
       //position.x += (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta;
 			//position.z += (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta;
 		}
+
+    //
+    // orient the camera
+    //
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
@@ -234,11 +241,34 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		this.object.lookAt( targetPosition );
 
+    //
+    // deal with vertical motion
+    //
+
     var breath = (0.007 * sin((new Date).getTime() * PI / 1000 / 4));
 
 		var verticalPosition = (map.getHeight(position.x, position.z) + character_height + breath);
 
-		this.object.position.y = verticalPosition;
+    if (this.velocity.y > 0) {
+      this.object.position.y += this.velocity.y * delta;
+
+      this.velocity.y -= gravity * delta;
+    } else if (!lineTrace(object.position, new Vector3(0, -(character_height + 0.01), 0))) {
+      this.velocity.y -= gravity * delta;
+
+      this.object.position.y += this.velocity.y  * delta;
+    } else {
+      this.object.position.y = verticalPosition;
+
+      if (this.jump) {
+        this.velocity.y += h("3 blocks") + gravity * 0.2;
+        this.jump = false;
+        this.canJump = false;
+      } else {
+        this.velocity.y = 0;
+        this.canJump = true;
+      }
+    }
 	};
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
