@@ -44,7 +44,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.moveRight    = false;
 	this.freeze       = false;
 
-	this.velocity = {x: 0, y: 0, z: 0};
+	this.velocity = new Vector3; //{x: 0, y: 0, z: 0};
 
 	this.mouseDragOn = false;
 
@@ -83,13 +83,10 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	};
 
 	this.onKeyDown = function ( event ) {
-
 		//event.preventDefault();
-
 		var t = (new Date()).getTime();
 
 		switch ( event.keyCode ) {
-
 			case 38: /*up*/
 			case 87: /*W*/ this.moveForward = this.moveForward || t; break;
 
@@ -106,15 +103,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			case 70: /*F*/ this.moveDown = this.moveDown || t; break;
 
 			case 81: /*Q*/ this.freeze = !this.freeze; break;
-
 		}
-
 	};
 
 	this.onKeyUp = function ( event ) {
-
 		switch( event.keyCode ) {
-
 			case 38: /*up*/
 			case 87: /*W*/ this.moveForward = false; break;
 
@@ -129,9 +122,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 82: /*R*/ this.moveUp = false; break;
 			case 70: /*F*/ this.moveDown = false; break;
-
 		}
-
 	};
 
 	this.update = function( delta ) {
@@ -142,11 +133,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var moveSpeed = function(timestamp) {
 			if (timestamp == false) return 0;
-
-      if (lineTrace(position.clone().sub(new Vector3(0, character_height, 0)), (new Vector3(1, 0, 0)).multiply(h("1 block")))) {
-        console.log("YO WE HIT GROUND YO");
-        return 0;
-      }
 
       return sin(min(3000, (new Date()).getTime() - timestamp)/3000 * (PI/2)) * h("1 seconds walk");
 		};
@@ -181,16 +167,43 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//if ( this.moveUp      && !this.moveDown      )  this.velocity.y =  moveSpeed(this.moveUp      );
 		//if ( this.moveDown    && !this.moveUp        )  this.velocity.y = -moveSpeed(this.moveDown    );
 
+    //
+    // check for collisions
+    //
+
+    // TODO I'd feel better if this used this.object.rotation.x or the like instead of mouse position
+    var theta = THREE.Math.degToRad(this.mouseX);
+    var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
+    var right_angle = THREE.Math.degToRad(90);
+
+    var impulse = new Vector3(
+      (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta,
+      0,
+      (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta
+    );
+
+    var forward = impulse.clone().normalize().multiply(0.07*h("1 block"));
+
+    var check = function(dir) {
+      return lineTrace(
+        position.clone().sub(new Vector3(0, character_height - 0.5*h("1 block"), 0)),
+        dir
+      );
+    };
+
+    if (check(forward)) { //check(forward) || check(backward) || check(right) || check(left)
+      console.log("YO WE HIT GROUND YO");
+      impulse = new Vector3(0,0,0);
+    }
+
+    //
+    // apply velocity to position
+    //
+
 		if (isValid.apply(this, [this.velocity.x, this.velocity.y, this.velocity.z])) {
-      // TODO I'd feel better if this used this.object.rotation.x or the like instead of mouse position
-      var theta = THREE.Math.degToRad(this.mouseX);
-
-			var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
-
-			var right_angle = THREE.Math.degToRad(90);
-
-			position.x += (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta;
-			position.z += (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta;
+			position.add(impulse);
+      //position.x += (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta;
+			//position.z += (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta;
 		}
 
 		var actualLookSpeed = delta * this.lookSpeed;
@@ -243,5 +256,4 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	};
 
 	this.handleResize();
-
 };
