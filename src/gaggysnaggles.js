@@ -62,7 +62,6 @@ function init() {
 	container = document.getElementById( 'container' );
 
 	camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 20000 );
-  //camera.position.y = map.getHeight( worldHalfWidth, worldHalfDepth ) * h("1 block") + h("1 block");
   camera.position.y = map.getHeight( 0, 0 ) + h("5 blocks");
 
 	controls = new THREE.FirstPersonControls( camera );
@@ -144,8 +143,11 @@ function init() {
 	var noiseFilter = new THREE.ShaderPass( THREE.RGBShiftShader );
 	noiseFilter.uniforms[ 'amount' ].value = 0.0015;
 
-	var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
-	effectFilm.renderToScreen = true;
+  var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
+	//effectFilm.renderToScreen = true;
+
+  var vignetteFilter = new THREE.ShaderPass( THREE.VignetteShader );
+  vignetteFilter.renderToScreen = true;
 
 	//var effectBloom = new THREE.BloomPass( 1, 25, 1.99 );
 
@@ -155,6 +157,8 @@ function init() {
 	//composer.addPass(effectBloom);
 	//composer.addPass(fxaaFilter);
 	composer.addPass(effectFilm);
+  composer.addPass(vignetteFilter);
+
 	//composer.addPass(noiseFilter);
 
 

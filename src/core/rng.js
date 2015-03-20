@@ -223,11 +223,13 @@ window.Rng = function() {
 
 Rng.seed = function(new_seed) {
 	rng_internal.seed(new_seed);
-	
+
 	this.current_seed = new_seed;
 };
 
-Rng.seed((new Date).getTime());
+//Rng.seed((new Date).getTime());
+
+Rng.seed(1426749985987);
 
 // So to use Rng just do Rng() & it'll return a [0, 1) decimal
 
