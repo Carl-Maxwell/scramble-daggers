@@ -1,8 +1,15 @@
 
 
-* remove all references to the name 'gaggysnaggles'
-  => (the project used to be named gaggysnaggles, but was renamed Scramble Daggers to be more pronounceable)
+
+* cleanliness of code
+* walls blocking the game's edges
+* maybe those walls blocking off the higher areas of the game
+* maybe add minecraft like hills or something
+* a goal?
+* enemies?
+* shooting at enemies?
+* enemies dying?
+* a menu
+* controlling the game seed
 
 * when the browser is weirdly scaled the view is skewed looking (think like 1920*100)
-
-* 

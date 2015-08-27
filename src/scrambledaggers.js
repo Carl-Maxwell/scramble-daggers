@@ -26,8 +26,6 @@ window.character_height = h("2 blocks");
 // procedurally generate map
 //
 
-// TODO should map be capitalized?
-
 window.map = window.map || {};
 
 map.heightmap = generateHeight( worldWidth, worldDepth );
@@ -39,11 +37,11 @@ map.getHeight = function(x, z) {
 	// TODO why is this being multiplied by 0.2?
 
 	return ((map.heightmap[x + z * worldWidth] * 0.2) | 0) * h("1 block");
-}
+};
 
 map.getHeight_internal = function(x, z) {
 	return (map.heightmap[x + z * worldWidth] * 0.2) | 0;
-}
+};
 
 //
 // initialize stuff
@@ -89,7 +87,6 @@ function init() {
 	var groundTexture = THREE.ImageUtils.loadTexture( 'textures/swirl/atlas.png' );
 
 	groundTexture.magFilter = THREE.NearestFilter;
-
 
 	var ground = new THREE.Mesh(
 		groundGeometry,
