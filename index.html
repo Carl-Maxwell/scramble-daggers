@@ -38,103 +38,103 @@
 	<body>
 
 		<div id="container"><br /><br /><br /><br /><br />Generating world...</div>
-		<div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - <a href="http://www.minecraft.net/" target="_blank">minecraft</a> demo. featuring <a href="http://painterlypack.net/" target="_blank">painterly pack</a><br />(left click: forward, right click: backward)</div>
+		<div id="info"><a href="http://painterlypack.net/" target="_blank">painterly pack</a><br />(w key: forward, mouse: look around)</div>
 
-		<script src="three/three.js"></script>
+		<script src="src/three/three.js"></script>
 
-		<script src="js/controls/FirstPersonControls.js"></script>
+		<script src="src/js/controls/FirstPersonControls.js"></script>
 
-		<script src="js/ImprovedNoise.js"></script>
-		<script src="js/Detector.js"></script>
-		<script src="js/libs/stats.min.js"></script>
+		<script src="src/js/ImprovedNoise.js"></script>
+		<script src="src/js/Detector.js"></script>
+		<script src="src/js/libs/stats.min.js"></script>
 
 		<!--- the scripts below here were for the defferred renderer example --->
 
-		<script src="js/loaders/BinaryLoader.js"></script>
+		<script src="src/js/loaders/BinaryLoader.js"></script>
 
-		<script src="js/renderers/WebGLDeferredRenderer.js"></script>
-		<script src="js/ShaderDeferred.js"></script>
+		<script src="src/js/renderers/WebGLDeferredRenderer.js"></script>
+		<script src="src/js/ShaderDeferred.js"></script>
 
-		<script src="js/shaders/CopyShader.js"></script>
-		<script src="js/shaders/FXAAShader.js"></script>
-		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="src/js/shaders/CopyShader.js"></script>
+		<script src="src/js/shaders/FXAAShader.js"></script>
+		<script src="src/js/shaders/ConvolutionShader.js"></script>
 
-		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="src/js/postprocessing/BloomPass.js"></script>
 
 		<!--- Post processing stuff --->
 
-		<script src="js/postprocessing/FilmPass.js"></script>
+		<script src="src/js/postprocessing/FilmPass.js"></script>
 
-		<script src="js/shaders/BasicShader.js"></script>
+		<script src="src/js/shaders/BasicShader.js"></script>
 
-		<script src="js/shaders/ConvolutionShader.js"></script>
-		<script src="js/shaders/EdgeShader2.js"></script>
-		<script src="js/shaders/FresnelShader.js"></script>
-		<script src="js/shaders/HueSaturationShader.js"></script>
-		<script src="js/shaders/NormalMapShader.js"></script>
-		<script src="js/shaders/TriangleBlurShader.js"></script>
-		<script src="js/shaders/VignetteShader.js"></script>
-		<script src="js/shaders/BleachBypassShader.js"></script>
-		<script src="js/shaders/BrightnessContrastShader.js"></script>
-		<script src="js/shaders/CopyShader.js"></script>
-		<script src="js/shaders/EdgeShader.js"></script>
-		<script src="js/shaders/FXAAShader.js"></script>
-		<script src="js/shaders/KaleidoShader.js"></script>
-		<script src="js/shaders/RGBShiftShader.js"></script>
-		<script src="js/shaders/UnpackDepthRGBAShader.js"></script>
-		<script src="js/shaders/BlendShader.js"></script>
-		<script src="js/shaders/ColorCorrectionShader.js"></script>
-		<script src="js/shaders/DOFMipMapShader.js"></script>
-		<script src="js/shaders/FilmShader.js"></script>
-		<script src="js/shaders/HorizontalBlurShader.js"></script>
-		<script src="js/shaders/LuminosityShader.js"></script>
-		<script src="js/shaders/SepiaShader.js"></script>
-		<script src="js/shaders/VerticalBlurShader.js"></script>
-		<script src="js/shaders/BokehShader2.js"></script>
-		<script src="js/shaders/ColorifyShader.js"></script>
-		<script src="js/shaders/DotScreenShader.js"></script>
-		<script src="js/shaders/FocusShader.js"></script>
-		<script src="js/shaders/HorizontalTiltShiftShader.js"></script>
-		<script src="js/shaders/MirrorShader.js"></script>
-		<script src="js/shaders/SSAOShader.js"></script>
-		<script src="js/shaders/VerticalTiltShiftShader.js"></script>
+		<script src="src/js/shaders/ConvolutionShader.js"></script>
+		<script src="src/js/shaders/EdgeShader2.js"></script>
+		<script src="src/js/shaders/FresnelShader.js"></script>
+		<script src="src/js/shaders/HueSaturationShader.js"></script>
+		<script src="src/js/shaders/NormalMapShader.js"></script>
+		<script src="src/js/shaders/TriangleBlurShader.js"></script>
+		<script src="src/js/shaders/VignetteShader.js"></script>
+		<script src="src/js/shaders/BleachBypassShader.js"></script>
+		<script src="src/js/shaders/BrightnessContrastShader.js"></script>
+		<script src="src/js/shaders/CopyShader.js"></script>
+		<script src="src/js/shaders/EdgeShader.js"></script>
+		<script src="src/js/shaders/FXAAShader.js"></script>
+		<script src="src/js/shaders/KaleidoShader.js"></script>
+		<script src="src/js/shaders/RGBShiftShader.js"></script>
+		<script src="src/js/shaders/UnpackDepthRGBAShader.js"></script>
+		<script src="src/js/shaders/BlendShader.js"></script>
+		<script src="src/js/shaders/ColorCorrectionShader.js"></script>
+		<script src="src/js/shaders/DOFMipMapShader.js"></script>
+		<script src="src/js/shaders/FilmShader.js"></script>
+		<script src="src/js/shaders/HorizontalBlurShader.js"></script>
+		<script src="src/js/shaders/LuminosityShader.js"></script>
+		<script src="src/js/shaders/SepiaShader.js"></script>
+		<script src="src/js/shaders/VerticalBlurShader.js"></script>
+		<script src="src/js/shaders/BokehShader2.js"></script>
+		<script src="src/js/shaders/ColorifyShader.js"></script>
+		<script src="src/js/shaders/DotScreenShader.js"></script>
+		<script src="src/js/shaders/FocusShader.js"></script>
+		<script src="src/js/shaders/HorizontalTiltShiftShader.js"></script>
+		<script src="src/js/shaders/MirrorShader.js"></script>
+		<script src="src/js/shaders/SSAOShader.js"></script>
+		<script src="src/js/shaders/VerticalTiltShiftShader.js"></script>
 
-		<script src="js/postprocessing/EffectComposer.js"></script>
-		<script src="js/postprocessing/RenderPass.js"></script>
-		<script src="js/postprocessing/MaskPass.js"></script>
-		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="src/js/postprocessing/EffectComposer.js"></script>
+		<script src="src/js/postprocessing/RenderPass.js"></script>
+		<script src="src/js/postprocessing/MaskPass.js"></script>
+		<script src="src/js/postprocessing/ShaderPass.js"></script>
 
 		<!--- monkeypatching & stuff --->
 
-		<script src="monkeypatchs/monkeypatch.js"></script>
-		<script src="monkeypatchs/import.js"></script>
-		<script src="monkeypatchs/shuffle.js"></script>
-		<script src="monkeypatchs/range.js"></script>
-		<script src="monkeypatchs/vector.js"></script>
-		<script src="monkeypatchs/debugify.js"></script>
-		<script src="monkeypatchs/clamp.js"></script>
+		<script src="src/monkeypatchs/monkeypatch.js"></script>
+		<script src="src/monkeypatchs/import.js"></script>
+		<script src="src/monkeypatchs/shuffle.js"></script>
+		<script src="src/monkeypatchs/range.js"></script>
+		<script src="src/monkeypatchs/vector.js"></script>
+		<script src="src/monkeypatchs/debugify.js"></script>
+		<script src="src/monkeypatchs/clamp.js"></script>
 
 		<!--- Core Sa engine stuff --->
 
-		<script src="core/rng.js"></script>
-		<script src="core/fate.js"></script>
-		<script src="core/hinge.js"></script>
-		<script src="core/lineTrace.js"></script>
-		<script src="core/ease.js"></script>
-		<script src="core/physics.js"></script>
-		<script src="core/timer.js"></script>
+		<script src="src/core/rng.js"></script>
+		<script src="src/core/fate.js"></script>
+		<script src="src/core/hinge.js"></script>
+		<script src="src/core/lineTrace.js"></script>
+		<script src="src/core/ease.js"></script>
+		<script src="src/core/physics.js"></script>
+		<script src="src/core/timer.js"></script>
 
 		<!--- Scrambledaggers stuff --->
 
-		<script src="random_walk.js"></script>
-		<script src="createcube.js"></script>
-		<script src="scrambledaggers.js"></script>
-		<script src="pointerlock.js"></script>
+		<script src="src/random_walk.js"></script>
+		<script src="src/createcube.js"></script>
+		<script src="src/scrambledaggers.js"></script>
+		<script src="src/pointerlock.js"></script>
 
 		<!--- Test Stuff --->
 
-		<script src="../test/testFramework.js"></script>
-		<script src="../test/rng.js"></script>
+		<script src="test/testFramework.js"></script>
+		<script src="test/rng.js"></script>
 
 	</body>
 </html>
