@@ -69,7 +69,7 @@ function createCube() {
 
 		for ( var x = 0; x < worldWidth; x ++ ) {
 
-			var h = getY( x, z );
+			var h = map.getHeight_internal( x, z );
 
 			matrix.makeTranslation(
 				x * 100 - worldHalfWidth * 100,
@@ -77,15 +77,15 @@ function createCube() {
 				z * 100 - worldHalfDepth * 100
 			);
 
-			var px = getY( x + 1, z );
-			var nx = getY( x - 1, z );
-			var pz = getY( x, z + 1 );
-			var nz = getY( x, z - 1 );
+			var px = map.getHeight_internal( x + 1, z );
+			var nx = map.getHeight_internal( x - 1, z );
+			var pz = map.getHeight_internal( x, z + 1 );
+			var nz = map.getHeight_internal( x, z - 1 );
 
-			var pxpz = getY( x + 1, z + 1 );
-			var nxpz = getY( x - 1, z + 1 );
-			var pxnz = getY( x + 1, z - 1 );
-			var nxnz = getY( x - 1, z - 1 );
+			var pxpz = map.getHeight_internal( x + 1, z + 1 );
+			var nxpz = map.getHeight_internal( x - 1, z + 1 );
+			var pxnz = map.getHeight_internal( x + 1, z - 1 );
+			var nxnz = map.getHeight_internal( x - 1, z - 1 );
 
 			var a = nx > h || nz > h || nxnz > h ? 0 : 1;
 			var b = nx > h || pz > h || nxpz > h ? 0 : 1;
