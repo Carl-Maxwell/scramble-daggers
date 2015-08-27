@@ -3,4 +3,6 @@
 * remove all references to the name 'gaggysnaggles'
   => (the project used to be named gaggysnaggles, but was renamed Scramble Daggers to be more pronounceable)
 
+* when the browser is weirdly scaled the view is skewed looking (think like 1920*100)
+
 * 
