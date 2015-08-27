@@ -128,7 +128,6 @@
 			animate();
 
 			function init() {
-
 				container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 20000 );
@@ -179,47 +178,37 @@
 				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
-
 			}
 
 			function onWindowResize() {
-
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 				controls.handleResize();
-
 			}
 
 			function loadTexture( path, callback ) {
-
 				var image = new Image();
 
 				image.onload = function () { callback(); };
 				image.src = path;
 
 				return image;
-
 			}
 
 			function animate() {
-
 				requestAnimationFrame( animate );
 
 				render();
 				stats.update();
-
 			}
 
 			function render() {
-
 				controls.update( clock.getDelta() );
 				renderer.render( scene, camera );
-
 			}
-
 		</script>
 
 	</body>
