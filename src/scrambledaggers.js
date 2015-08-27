@@ -33,10 +33,10 @@ window.map = window.map || {};
 map.heightmap = generateHeight( worldWidth, worldDepth );
 
 map.getHeight = function(x, z) {
-  x = round(x/h("1 block") + worldHalfWidth);
-  z = round(z/h("1 block") + worldHalfDepth);
+	x = round(x/h("1 block") + worldHalfWidth);
+	z = round(z/h("1 block") + worldHalfDepth);
 
-  // TODO why is this being multiplied by 0.2?
+	// TODO why is this being multiplied by 0.2?
 
 	return ((map.heightmap[x + z * worldWidth] * 0.2) | 0) * h("1 block");
 }
@@ -62,7 +62,7 @@ function init() {
 	container = document.getElementById( 'container' );
 
 	camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 20000 );
-  camera.position.y = map.getHeight( 0, 0 ) + h("5 blocks");
+	camera.position.y = map.getHeight( 0, 0 ) + h("5 blocks");
 
 	controls = new THREE.FirstPersonControls( camera );
 
@@ -143,11 +143,11 @@ function init() {
 	var noiseFilter = new THREE.ShaderPass( THREE.RGBShiftShader );
 	noiseFilter.uniforms[ 'amount' ].value = 0.0015;
 
-  var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
+	var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
 	//effectFilm.renderToScreen = true;
 
-  var vignetteFilter = new THREE.ShaderPass( THREE.VignetteShader );
-  vignetteFilter.renderToScreen = true;
+	var vignetteFilter = new THREE.ShaderPass( THREE.VignetteShader );
+	vignetteFilter.renderToScreen = true;
 
 	//var effectBloom = new THREE.BloomPass( 1, 25, 1.99 );
 
@@ -157,7 +157,7 @@ function init() {
 	//composer.addPass(effectBloom);
 	//composer.addPass(fxaaFilter);
 	composer.addPass(effectFilm);
-  composer.addPass(vignetteFilter);
+	composer.addPass(vignetteFilter);
 
 	//composer.addPass(noiseFilter);
 
@@ -189,4 +189,3 @@ function render() {
 	composer.render( clock.getDelta() );
 	//renderer.render( scene, camera );
 }
-
