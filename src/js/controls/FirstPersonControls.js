@@ -41,23 +41,23 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.phi   = 0;
 	this.theta = 0;
 
-  // keypress booleans:
+	// keypress booleans:
 	this.moveForward  = false;
 	this.moveBackward = false;
 	this.moveLeft     = false;
 	this.moveRight    = false;
 	this.freeze       = false;
-  this.jump         = false;
+	this.jump         = false;
 
-  // keypress-related player state
-  this.canJump  = true;
+	// keypress-related player state
+	this.canJump  = true;
 	this.velocity = new Vector3();
-  this.move = {
-    magnitude   : new Timer(3),
-    accelerating: false       ,
-    direction   : new Vector3()
-  };
-  this.move.magnitude.reverse();
+	this.move = {
+		magnitude   : new Timer(3),
+		accelerating: false       ,
+		direction   : new Vector3()
+	};
+	this.move.magnitude.reverse();
 
 	this.mouseDragOn = false;
 
@@ -109,7 +109,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 81: /*Q*/ this.freeze = !this.freeze; break;
 
-      case 32: /*space*/ this.jump = this.canJump; break;
+			case 32: /*space*/ this.jump = this.canJump; break;
 		}
 	};
 
@@ -123,7 +123,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 39: /*right*/ case 68: /*D*/ this.moveRight    = false; break;
 
-      case 32: /*space*/ this.jump = false; break;
+			case 32: /*space*/ this.jump = false; break;
 		}
 	};
 
@@ -133,27 +133,27 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var position = this.camera.position;
 
-    this.move.direction
-      .set(0, 0, 0)
-      .add(this.moveForward  ? new Vector3(  0, 0, -1) : 0)
-      .add(this.moveBackward ? new Vector3(  0, 0,  1) : 0)
-      .add(this.moveRight    ? new Vector3(  1, 0,  0) : 0)
-      .add(this.moveLeft     ? new Vector3( -1, 0,  0) : 0);
+		this.move.direction
+			.set(0, 0, 0)
+			.add(this.moveForward  ? new Vector3(  0, 0, -1) : 0)
+			.add(this.moveBackward ? new Vector3(  0, 0,  1) : 0)
+			.add(this.moveRight    ? new Vector3(  1, 0,  0) : 0)
+			.add(this.moveLeft     ? new Vector3( -1, 0,  0) : 0);
 
-    if (this.move.direction.length() && !this.move.accelerating) {
-      this.move.accelerating = true;
-      this.move.magnitude.reverse();
-      this.move.magnitude.setDuration(3);
-    } else if (!this.move.direction.length() && this.move.accelerating) {
-      this.move.accelerating = false;
-      this.move.magnitude.reverse();
-      this.move.magnitude.setDuration(0.4);
-    }
+		if (this.move.direction.length() && !this.move.accelerating) {
+			this.move.accelerating = true;
+			this.move.magnitude.reverse();
+			this.move.magnitude.setDuration(3);
+		} else if (!this.move.direction.length() && this.move.accelerating) {
+			this.move.accelerating = false;
+			this.move.magnitude.reverse();
+			this.move.magnitude.setDuration(0.4);
+		}
 
 		var moveSpeed = function(timestamp) {
 			if (timestamp === false) return 0;
 
-      return Ease(timestamp.get(), "outSine") * h("1 seconds walk");
+			return Ease(timestamp.get(), "outSine") * h("1 seconds walk");
 		};
 
 		var decelerateSpeed = function(speed) {
@@ -171,44 +171,44 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//if ( this.moveLeft    && !this.moveRight     )  this.velocity.x = -moveSpeed(this.moveLeft    );
 		//if ( this.moveRight   && !this.moveLeft      )  this.velocity.x =  moveSpeed(this.moveRight   );
 
-    //this.velocity.x = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * this.move.direction.x;
-    this.velocity.z = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * (this.move.direction.z || sign(this.velocity.z));
+		//this.velocity.x = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * this.move.direction.x;
+		this.velocity.z = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * (this.move.direction.z || sign(this.velocity.z));
 
-    //
-    // check for collisions
-    //
+		//
+		// check for collisions
+		//
 
-    // TODO I'd feel better if this used this.camera.rotation.x or the like instead of mouse position
-    var theta = THREE.Math.degToRad(this.mouseX);
-    var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
-    var right_angle = THREE.Math.degToRad(90);
+		// TODO I'd feel better if this used this.camera.rotation.x or the like instead of mouse position
+		var theta = THREE.Math.degToRad(this.mouseX);
+		var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
+		var right_angle = THREE.Math.degToRad(90);
 
-    var impulse = new Vector3(
-      (cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta,
-      0,
-      (sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta
-    );
+		var impulse = new Vector3(
+			(cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta,
+			0,
+			(sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta
+		);
 
-    var forward = impulse.clone().normalize().multiply(0.07*h("1 block"));
+		var forward = impulse.clone().normalize().multiply(0.07*h("1 block"));
 
-    var check = function(dir) {
-      return lineTrace(
-        position.clone().sub(new Vector3(0, character_height - 0.5*h("1 block"), 0)),
-        dir
-      );
-    };
+		var check = function(dir) {
+			return lineTrace(
+				position.clone().sub(new Vector3(0, character_height - 0.5*h("1 block"), 0)),
+				dir
+			);
+		};
 
-    // TODO allow sliding collisions
+		// TODO allow sliding collisions
 
-    if (check(forward)) {
-      impulse = new Vector3(0, 0, 0);
-    }
+		if (check(forward)) {
+			impulse = new Vector3(0, 0, 0);
+		}
 
-    position.add(impulse);
+		position.add(impulse);
 
-    //
-    // orient the camera
-    //
+		//
+		// orient the camera
+		//
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
@@ -238,34 +238,34 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		this.camera.lookAt( this.lookTarget );
 
-    //
-    // deal with vertical motion
-    //
+		//
+		// deal with vertical motion
+		//
 
-    var breath = 0.007 * sin((new Date()).getTime() * PI / 1000 / 4);
+		var breath = 0.007 * sin((new Date()).getTime() * PI / 1000 / 4);
 
 		var verticalPosition = (map.getHeight(position.x, position.z) + character_height + breath);
 
-    if (this.velocity.y > 0) {
-      this.camera.position.y += this.velocity.y * delta;
+		if (this.velocity.y > 0) {
+			this.camera.position.y += this.velocity.y * delta;
 
-      this.velocity.y -= gravity * delta;
-    } else if (!lineTrace(camera.position, new Vector3(0, -(character_height + 0.01), 0))) {
-      this.velocity.y -= gravity * delta;
+			this.velocity.y -= gravity * delta;
+		} else if (!lineTrace(camera.position, new Vector3(0, -(character_height + 0.01), 0))) {
+			this.velocity.y -= gravity * delta;
 
-      this.camera.position.y += this.velocity.y  * delta;
-    } else {
-      this.camera.position.y = verticalPosition;
+			this.camera.position.y += this.velocity.y * delta;
+		} else {
+			this.camera.position.y = verticalPosition;
 
-      if (this.jump) {
-        this.velocity.y += h("3 blocks") + gravity * 0.2;
-        this.jump = false;
-        this.canJump = false;
-      } else {
-        this.velocity.y = 0;
-        this.canJump = true;
-      }
-    }
+			if (this.jump) {
+				this.velocity.y += h("3 blocks") + gravity * 0.2;
+				this.jump = false;
+				this.canJump = false;
+			} else {
+				this.velocity.y = 0;
+				this.canJump = true;
+			}
+		}
 	};
 
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );

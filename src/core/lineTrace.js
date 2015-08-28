@@ -1,26 +1,24 @@
 
 
 window.lineTrace = function() {
-  var start, line, end;
+	var start, line, end;
 
-  switch (arguments.length) {
-    case 2: start = arguments[0]; line = arguments[1]; break;
-    case 1:
-  };
+	switch (arguments.length) {
+		case 2: start = arguments[0]; line = arguments[1]; break;
+		case 1:
+	}
 
-  if (!(start instanceof Vector3) || !(line instanceof Vector3)) {
-    throw "lineTrace expected Vector3 arguments. Got: " + start.debugify() + " and " + line.debugify();
+	if (!(start instanceof Vector3) || !(line instanceof Vector3)) {
+		throw "lineTrace expected Vector3 arguments. Got: " + start.debugify() + " and " + line.debugify();
+	}
 
-    return;
-  }
+	end = (start.clone()).add(line);
 
-  end = (start.clone()).add(line);
+	if (end.y <= map.getHeight(end.x, end.z) || start.y <= map.getHeight(start.x, start.z)) {
+		return true;
+	}
 
-  if (end.y <= map.getHeight(end.x, end.z) || start.y <= map.getHeight(start.x, start.z)) {
-    return true;
-  }
-
-  return false;
+	return false;
 };
 
 // TODO should check whether it hits an entity

@@ -2,7 +2,7 @@
 window.currentTime = 0;
 
 //function Date() {
-//  this.getTime = function() { return window.currentTime; };
+//	this.getTime = function() { return window.currentTime; };
 //};
 
 //
@@ -10,14 +10,14 @@ window.currentTime = 0;
 //
 
 (function() {
-  window.currentTime += 1000*10;
+	window.currentTime += 1000*10;
 
-  var x = new Timer(8);
+	var x = new Timer(8);
 
-  window.currentTime += 1000*2;
+	window.currentTime += 1000*2;
 
-  x.reverse();
-  x.setDuration(8);
+	x.reverse();
+	x.setDuration(8);
 
 })();
 
