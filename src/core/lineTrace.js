@@ -15,7 +15,17 @@ window.lineTrace = function() {
 	end = (start.clone()).add(line);
 
 	if (end.y <= map.getHeight(end.x, end.z) || start.y <= map.getHeight(start.x, start.z)) {
-		return true;
+
+		var wallNormal;
+		if (abs(line.x) > abs(line.z)) {
+			wallNormal = new Vector3(-1 * sign(line.x), 0, 0);
+		} else {
+			wallNormal = new Vector3(0, 0, -1 * sign(line.z));
+		}
+
+		return wallNormal.add(line.clone().normalize()).normalize();
+
+		// return true;
 	}
 
 	return false;

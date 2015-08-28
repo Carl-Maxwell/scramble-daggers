@@ -207,7 +207,9 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		// TODO allow sliding collisions
 
 		if (check(forward)) {
-			impulse = new Vector3(0, 0, 0);
+			// console.log(check(forward).debugify());
+
+			impulse = check(forward).multiply(impulse.lengthManhattan());
 		}
 
 		position.add(impulse);
