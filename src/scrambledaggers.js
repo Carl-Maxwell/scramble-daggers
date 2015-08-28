@@ -1,5 +1,3 @@
-
-
 if ( ! Detector.webgl ) {
 	Detector.addGetWebGLMessage();
 	document.getElementById( 'container' ).innerHTML = "";
@@ -13,10 +11,14 @@ var container, stats;
 
 var camera, controls, scene, renderer;
 
-var mesh;
+var mesh, mat;
+
+//
+//
+//
 
 window.worldWidth = 128;
-window.worldDepth = 128,
+window.worldDepth = 128;
 window.worldHalfWidth = worldWidth / 2;
 window.worldHalfDepth = worldDepth / 2;
 
@@ -64,15 +66,15 @@ function init() {
 
 	controls = new THREE.FirstPersonControls( camera );
 
-	controls.movementSpeed = 1000;
+	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.125;
 	controls.lookVertical = true;
+	controls.constrainVertical = true;
+	controls.verticalMin = 0.7;
+	controls.verticalMax = 3;
 
 	scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2( 0x0, 0.00015 );
-
-	renderer = new THREE.WebGLRenderer({ clearColor: 0x0, antialias: true });
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	scene.fog = new THREE.FogExp2( 0xffffff, 0.00015 );
 
 	//
 	// ground mesh & texture
@@ -80,19 +82,19 @@ function init() {
 
 	var groundGeometry = createCube();
 
-	groundGeometry.mergeVertices();
-	groundGeometry.computeFaceNormals();
-	groundGeometry.computeVertexNormals( true );
+	//groundGeometry.mergeVertices();
+	//groundGeometry.computeFaceNormals();
+	//groundGeometry.computeVertexNormals( true );
 
 	var groundTexture = THREE.ImageUtils.loadTexture( 'textures/swirl/atlas.png' );
 
 	groundTexture.magFilter = THREE.NearestFilter;
+	groundTexture.minFilter = THREE.LinearMipMapLinearFilter;
 
 	var ground = new THREE.Mesh(
 		groundGeometry,
-		new THREE.MeshPhongMaterial( { map: groundTexture, ambient: 0xbbbbbb } )
+		new THREE.MeshLambertMaterial( { map: groundTexture, vertexColors: THREE.VertexColors } )
 	);
-
 	scene.add( ground );
 
 	//
@@ -104,6 +106,12 @@ function init() {
 	var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
 	directionalLight.position.set( 1, 1, 0.5 ).normalize();
 	scene.add( directionalLight );
+
+	renderer = new THREE.WebGLRenderer({antialias: true}); // antialias: true
+	renderer.setClearColor( 0xffffff );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
 
 	//
 	// fps counter
@@ -122,44 +130,6 @@ function init() {
 	// post processing
 	//
 
-	composer = new THREE.EffectComposer( renderer );
-	composer.addPass( new THREE.RenderPass( scene, camera ) );
-
-	//var effectFilm = new THREE.FilmPass( 0.2, 0, 2048, false );
-	//effectFilm.renderToScreen = true;
-
-	var dpr = 1;
-	if (window.devicePixelRatio !== undefined) {
-		dpr = window.devicePixelRatio;
-	}
-
-	var fxaaFilter = new THREE.ShaderPass( THREE.FXAAShader );
-	fxaaFilter.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
-	fxaaFilter.renderToScreen = true;
-
-	var noiseFilter = new THREE.ShaderPass( THREE.RGBShiftShader );
-	noiseFilter.uniforms[ 'amount' ].value = 0.0015;
-
-	var effectFilm = new THREE.FilmPass( 0.35, 0.025, 648, false );
-	//effectFilm.renderToScreen = true;
-
-	var vignetteFilter = new THREE.ShaderPass( THREE.VignetteShader );
-	vignetteFilter.renderToScreen = true;
-
-	//var effectBloom = new THREE.BloomPass( 1, 25, 1.99 );
-
-	var clearMask = new THREE.ClearMaskPass();
-
-	//composer.addPass(clearMask);
-	//composer.addPass(effectBloom);
-	//composer.addPass(fxaaFilter);
-	composer.addPass(effectFilm);
-	composer.addPass(vignetteFilter);
-
-	//composer.addPass(noiseFilter);
-
-
-	//handle window resizing
 	window.addEventListener( 'resize', onWindowResize, false );
 }
 
@@ -180,9 +150,6 @@ function animate() {
 }
 
 function render() {
-	renderer.clear();
-
 	controls.update( clock.getDelta() );
-	composer.render( clock.getDelta() );
-	//renderer.render( scene, camera );
+	renderer.render( scene, camera );
 }
