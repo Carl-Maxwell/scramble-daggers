@@ -58,6 +58,12 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		direction   : new Vector3()
 	};
 	this.move.magnitude.reverse();
+	this.moveMinor = {
+		magnitude   : new Timer(3),
+		accelerating: false       ,
+		direction   : new Vector3()
+	};
+	this.moveMinor.magnitude.reverse();
 
 	this.mouseDragOn = false;
 
@@ -71,7 +77,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	//
 
 	this.handleResize = function () {
-
 		if ( this.domElement === document ) {
 			this.viewHalfX = window.innerWidth / 2;
 			this.viewHalfY = window.innerHeight / 2;
@@ -79,7 +84,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			this.viewHalfX = this.domElement.offsetWidth / 2;
 			this.viewHalfY = this.domElement.offsetHeight / 2;
 		}
-
 	};
 
 	this.onMouseMove = function ( e ) {
@@ -143,11 +147,19 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if (this.move.direction.length() && !this.move.accelerating) {
 			this.move.accelerating = true;
 			this.move.magnitude.reverse();
-			this.move.magnitude.setDuration(3);
+			this.move.magnitude.setDuration(0.4);
+
+			this.moveMinor.accelerating = true;
+			this.moveMinor.magnitude.reverse();
+			this.moveMinor.magnitude.setDuration(3);
 		} else if (!this.move.direction.length() && this.move.accelerating) {
 			this.move.accelerating = false;
 			this.move.magnitude.reverse();
 			this.move.magnitude.setDuration(0.4);
+
+			this.moveMinor.accelerating = false;
+			this.moveMinor.magnitude.reverse();
+			this.moveMinor.magnitude.setDuration(0.4);
 		}
 
 		var moveSpeed = function(timestamp) {
@@ -157,22 +169,16 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		};
 
 		var decelerateSpeed = function(speed) {
-			//if (abs(speed) < 0.01) return 0;
-
 			return Ease(abs(speed)/h("1 seconds walk"), "inSine") * speed;
 		};
 
-		//this.velocity.x = decelerateSpeed(this.velocity.x);
-		//this.velocity.z = decelerateSpeed(this.velocity.z);
+		var speed = (
+		             Ease(this.move.magnitude.get()     , "outSine") +
+		             Ease(this.moveMinor.magnitude.get(), "outSine")
+		            ) / 2.0;
 
-		//if ( this.moveForward  && !this.moveBackward ) this.velocity.z  = -moveSpeed(this.moveForward );
-		//if ( this.moveBackward && !this.moveForward  ) this.velocity.z  =  moveSpeed(this.moveBackward);
-
-		//if ( this.moveLeft    && !this.moveRight     )  this.velocity.x = -moveSpeed(this.moveLeft    );
-		//if ( this.moveRight   && !this.moveLeft      )  this.velocity.x =  moveSpeed(this.moveRight   );
-
-		//this.velocity.x = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * this.move.direction.x;
-		this.velocity.z = Ease(this.move.magnitude.get(), "outSine") * h("1 seconds walk") * (this.move.direction.z || sign(this.velocity.z));
+		this.velocity.x = speed * h("1 seconds walk") * this.move.direction.x;
+		this.velocity.z = speed * h("1 seconds walk") * (this.move.direction.z || sign(this.velocity.z));
 
 		//
 		// check for collisions
