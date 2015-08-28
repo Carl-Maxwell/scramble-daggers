@@ -6,10 +6,21 @@
 * maybe those walls blocking off the higher areas of the game
 * maybe add minecraft like hills or something
 * a goal?
+* entities
 * enemies?
 * shooting at enemies?
 * enemies dying?
+* treasure chests?
 * a menu
 * controlling the game seed
+* A and D (strafing) are not working
+* instruct the user to use the keys
+  * when they discover an enemy, instruct them in the ways of survival and victory
+* sliding colissions
+  * (realtime sliding collision restitution)
+
+* there was a problem where the pointerlock code fired before the game stuff was created
+  => not sure how to make it happen in the proper sequence
+  => awkwardly the problem only happens once, unless you clear your cache (cause the files are all cached)
 
 * when the browser is weirdly scaled the view is skewed looking (think like 1920*100)
