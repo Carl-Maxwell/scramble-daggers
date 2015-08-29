@@ -200,16 +200,21 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		var check = function(dir) {
 			return lineTrace(
 				position.clone().sub(new Vector3(0, character_height - 0.5*h("1 block"), 0)),
-				dir
+				dir,
+				true
 			);
 		};
 
 		// TODO allow sliding collisions
 
-		if (check(forward)) {
-			// console.log(check(forward).debugify());
+		var wallNormal = check(forward);
 
-			impulse = check(forward).multiply(impulse.lengthManhattan());
+		if (round(forward.y) == -1) debugger
+
+		if (wallNormal) {
+			// console.log(impulse.lengthManhattan());
+
+			impulse = wallNormal.multiply(impulse.lengthManhattan());
 		}
 
 		position.add(impulse);
