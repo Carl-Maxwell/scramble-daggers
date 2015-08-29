@@ -69,9 +69,9 @@ function init() {
 	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.125;
 	controls.lookVertical = true;
-	controls.constrainVertical = true;
-	controls.verticalMin = 0.7;
-	controls.verticalMax = 3;
+	// controls.constrainVertical = true;
+	// controls.verticalMin = 0.7;
+	// controls.verticalMax = 3;
 
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2( 0xffffff, 0.00015 );
