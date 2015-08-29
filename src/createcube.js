@@ -3,7 +3,7 @@
 //
 
 function createCube() {
-	var light = new THREE.Color( 0xffffff );
+	var light  = new THREE.Color( 0xffffff );
 	var shadow = new THREE.Color( 0x505050 );
 
 	var matrix = new THREE.Matrix4();
@@ -63,12 +63,10 @@ function createCube() {
 	nzGeometry.applyMatrix( matrix.makeTranslation( 0, 0, - 50 ) );
 
 	var geometry = new THREE.Geometry();
-	var dummy = new THREE.Mesh();
+	var dummy    = new THREE.Mesh();
 
 	for ( var z = 0; z < worldDepth; z ++ ) {
-
 		for ( var x = 0; x < worldWidth; x ++ ) {
-
 			var h = map.getHeight_internal( x, z );
 
 			matrix.makeTranslation(
@@ -93,7 +91,6 @@ function createCube() {
 			var d = px > h || nz > h || pxnz > h ? 0 : 1;
 
 			if ( a + c > b + d ) {
-
 				var colors = py2Geometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = b === 0 ? shadow : light;
 				colors[ 1 ] = c === 0 ? shadow : light;
@@ -105,9 +102,7 @@ function createCube() {
 				colors[ 2 ] = a === 0 ? shadow : light;
 
 				geometry.merge( py2Geometry, matrix );
-
 			} else {
-
 				var colors = pyGeometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = a === 0 ? shadow : light;
 				colors[ 1 ] = b === 0 ? shadow : light;
@@ -119,11 +114,9 @@ function createCube() {
 				colors[ 2 ] = d === 0 ? shadow : light;
 
 				geometry.merge( pyGeometry, matrix );
-
 			}
 
 			if ( ( px != h && px != h + 1 ) || x == 0 ) {
-
 				var colors = pxGeometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = pxpz > px && x > 0 ? shadow : light;
 				colors[ 2 ] = pxnz > px && x > 0 ? shadow : light;
@@ -132,11 +125,9 @@ function createCube() {
 				colors[ 2 ] = pxnz > px && x > 0 ? shadow : light;
 
 				geometry.merge( pxGeometry, matrix );
-
 			}
 
 			if ( ( nx != h && nx != h + 1 ) || x == worldWidth - 1 ) {
-
 				var colors = nxGeometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = nxnz > nx && x < worldWidth - 1 ? shadow : light;
 				colors[ 2 ] = nxpz > nx && x < worldWidth - 1 ? shadow : light;
@@ -145,11 +136,9 @@ function createCube() {
 				colors[ 2 ] = nxpz > nx && x < worldWidth - 1 ? shadow : light;
 
 				geometry.merge( nxGeometry, matrix );
-
 			}
 
 			if ( ( pz != h && pz != h + 1 ) || z == worldDepth - 1 ) {
-
 				var colors = pzGeometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = nxpz > pz && z < worldDepth - 1 ? shadow : light;
 				colors[ 2 ] = pxpz > pz && z < worldDepth - 1 ? shadow : light;
@@ -158,11 +147,9 @@ function createCube() {
 				colors[ 2 ] = pxpz > pz && z < worldDepth - 1 ? shadow : light;
 
 				geometry.merge( pzGeometry, matrix );
-
 			}
 
 			if ( ( nz != h && nz != h + 1 ) || z == 0 ) {
-
 				var colors = nzGeometry.faces[ 0 ].vertexColors;
 				colors[ 0 ] = pxnz > nz && z > 0 ? shadow : light;
 				colors[ 2 ] = nxnz > nz && z > 0 ? shadow : light;
@@ -171,11 +158,8 @@ function createCube() {
 				colors[ 2 ] = nxnz > nz && z > 0 ? shadow : light;
 
 				geometry.merge( nzGeometry, matrix );
-
 			}
-
 		}
-
 	}
 
 	return geometry;

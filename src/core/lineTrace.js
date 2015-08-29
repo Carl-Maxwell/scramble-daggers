@@ -23,9 +23,9 @@ window.lineTrace = function() {
 			wallNormal = new Vector3(0, 0, -1 * sign(line.z));
 		}
 
-		return wallNormal.add(line.clone().normalize()).normalize();
+		// return wallNormal;//.add(line.clone().normalize()).normalize();
 
-		// return true;
+		return true;
 	}
 
 	return false;

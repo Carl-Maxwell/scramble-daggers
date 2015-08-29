@@ -98,6 +98,13 @@ function generateHeight( width, height ) {
 					this.map[i] = any ? 65 : 70;
 				}
 
+				window.things = window.things || {};
+				window.things[x] = (window.things[x] || 0) + 1;
+
+				if ([0, WIDTH-1].indexOf(x) >= 0 || [0, HEIGHT-1].indexOf(y) >= 0) {
+					this.map[i] = 80;
+				}
+
 				// this.map[i] = this.map[i] || max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
 				//round( sin( abs((x - WIDTH/2) / (WIDTH/2) ) * abs((y - HEIGHT/2) / (HEIGHT/2)) * (PI/2) ) * 60 );
 			}
