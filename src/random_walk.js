@@ -1,23 +1,19 @@
 
 
 function generateHeight( width, height ) {
-	/*
-	var data = [], perlin = new ImprovedNoise(),
+	var perlinMap = [], perlin = new ImprovedNoise(),
 	size = width * height, quality = 2, z = Rng() * 100;
 
 	for ( var j = 0; j < 4; j ++ ) {
-
-		if ( j == 0 ) for ( var i = 0; i < size; i ++ ) data[ i ] = 0;
+		if ( j == 0 ) for ( var i = 0; i < size; i ++ ) perlinMap[ i ] = 0;
 
 		for ( var i = 0; i < size; i ++ ) {
 			var x = i % width, y = ( i / width ) | 0;
-			data[ i ] += perlin.noise( x / quality, y / quality, z ) * quality;
+			perlinMap[ i ] += perlin.noise( x / quality, y / quality, z ) * quality;
 		}
 
-		quality *= 4
-
+		quality *= 4;
 	}
-	*/
 
 	var Agent = function() {
 		var BLOCK_SIZE = 1,
@@ -69,18 +65,16 @@ function generateHeight( width, height ) {
 			this.position.x = max(0, min(WIDTH  - BLOCK_SIZE, this.position.x + x));
 			this.position.y = max(0, min(HEIGHT - BLOCK_SIZE, this.position.y + y));
 
-			var entity_key = round( (WIDTH / BLOCK_SIZE * floor(this.position.y/BLOCK_SIZE)) + floor(this.position.x/BLOCK_SIZE) );
+			var entity_key = round(
+				(WIDTH / BLOCK_SIZE * floor(this.position.y/BLOCK_SIZE)) +
+				floor(this.position.x/BLOCK_SIZE)
+			);
 
 			if (typeof this.map[ entity_key ] == 'undefined') {
 				console.log( 'entity not found!', this.position.x, this.position.y, entity_key );
 			}
 
-			this.map[ entity_key ] = 60; //|| round( (248 - this.map[ entity_key ]) * 0.01 );
-
-//		entities[ entity_key ].sprite.color[0] += round( (248 - rgb[0]) * 0.2 );
-//		entities[ entity_key ].sprite.color[1] += round( (187 - rgb[1]) * 0.2 );
-//		entities[ entity_key ].sprite.color[2] += round( (198 - rgb[2]) * 0.2 );
-
+			this.map[ entity_key ] = 60;
 		};
 
 		this.destroy = function() {
@@ -88,7 +82,9 @@ function generateHeight( width, height ) {
 				var x = i % WIDTH,
 				    y = (i-x)/WIDTH;
 
-				// var dist = pow(2, x - WIDTH / 2) + pow(2, y - HEIGHT/2);
+				//
+				//
+				//
 
 				if (this.map[i] == 0) {
 					var any = false;
@@ -98,15 +94,35 @@ function generateHeight( width, height ) {
 					this.map[i] = any ? 65 : 70;
 				}
 
+				//
+				//
+				//
+
 				window.things = window.things || {};
 				window.things[x] = (window.things[x] || 0) + 1;
 
 				if ([0, WIDTH-1].indexOf(x) >= 0 || [0, HEIGHT-1].indexOf(y) >= 0) {
 					this.map[i] = 80;
 				}
+			}
 
-				// this.map[i] = this.map[i] || max(min(random() * 255 + random() * 255, random() * 255 + random() * 255) / 2, 100);
-				//round( sin( abs((x - WIDTH/2) / (WIDTH/2) ) * abs((y - HEIGHT/2) / (HEIGHT/2)) * (PI/2) ) * 60 );
+			for (i = 0; i < WIDTH * HEIGHT; i++) {
+				var x = i % WIDTH,
+				    y = (i-x)/WIDTH;
+
+				//
+				//
+				//
+
+				var lowestPoint = min.apply(Math, [
+					this.map[i],
+					this.map[i+1],
+					this.map[i-1],
+					this.map[i+WIDTH],
+					this.map[i-WIDTH]
+				].filter(function(e) { return !!e; } ));
+
+				if (lowestPoint >= 70) this.map[i] = min(lowestPoint+5, max(70, 70 + perlinMap[i]));
 			}
 		};
 	};
