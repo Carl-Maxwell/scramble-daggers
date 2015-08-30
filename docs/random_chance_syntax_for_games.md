@@ -1,4 +1,7 @@
-Often, [randomness in games is different](https://www.youtube.com/watch?v=bY7aRJE-oOY)
+
+# Random Chance Syntax for Games
+
+Often, [randomness in games is different](https://www.youtube.com/watch?v=bY7aRJE-oOY#t=9s)
 from randomness in other circumstances. Pure chaotic randomness is *unfair* and so is
 generally undesirable. Usually, what you want to do is say something like:
 
@@ -19,7 +22,7 @@ chances, but have them change over time:
 
 > "Chests have a 1.7763568394002505^-15 chance of having a golden chalice, except
 every time you open a chest and don't acquire a golden chalice the odds of
-finding one double, and each time you acquire a golden chalice return to
+finding one double, and each time you acquire a golden chalice they return to
 1.7763568394002505^-15."
 
 (That number is just 2 to the fiftieth power: 2 divided by 2 fifty times. This

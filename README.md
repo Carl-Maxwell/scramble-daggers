@@ -96,7 +96,7 @@ if (isForwardKeyDown && !accelerating) {
 
 var speed = Ease(timeSinceKeyhit.get(), "outSine");
 
-this.velocity.x = speed * h("1 seconds walk") * direction.x;
+this.velocity.x = speed * h("1 seconds walk");
 ```
 
 #### window.Timestamp()
