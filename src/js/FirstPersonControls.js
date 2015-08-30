@@ -162,16 +162,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 			this.moveMinor.magnitude.setDuration(0.4);
 		}
 
-		var moveSpeed = function(timestamp) {
-			if (timestamp === false) return 0;
-
-			return Ease(timestamp.get(), "outSine") * h("1 seconds walk");
-		};
-
-		var decelerateSpeed = function(speed) {
-			return Ease(abs(speed)/h("1 seconds walk"), "inSine") * speed;
-		};
-
 		var speed = (
 		             Ease(this.move.magnitude.get()     , "outSine") +
 		             Ease(this.moveMinor.magnitude.get(), "outSine")
@@ -209,7 +199,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if (check(forward)) {
 			// console.log(impulse.clone().normalize(), check(forward));
 			// impulse = impulse.clone().normalize().add(check(forward)).multiply(impulse.lengthManhattan());
-			
+
 			impulse = new Vector3(0, 0, 0);
 		}
 
