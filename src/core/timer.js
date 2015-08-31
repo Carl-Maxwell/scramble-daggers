@@ -9,6 +9,10 @@ window.Timer = function(duration) {
 	return this;
 };
 
+window.Timer.prototype.restart = function() {
+	this.start.set();
+};
+
 window.Timer.prototype.get = function() {
 	return abs(clamp(
 		this.start.distance() / this.duration,
@@ -43,9 +47,13 @@ window.Timer.prototype.setDuration = function(newDuration) {
 };
 
 window.Timestamp = function() {
-	this.value = (new Date()).getTime()/1000 - window.gameStart;
+	this.set();
 
 	return this;
+};
+
+window.Timestamp.prototype.set = function() {
+	this.value = (new Date()).getTime()/1000 - window.gameStart;
 };
 
 window.Timestamp.prototype.distance = function(then) {

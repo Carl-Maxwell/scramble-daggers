@@ -49,6 +49,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.freeze       = false;
 	this.jump         = false;
 
+	this.shoot        = false;
+
 	// keypress-related player state
 	this.canJump  = true;
 	this.velocity = new Vector3();
@@ -64,6 +66,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		direction   : new Vector3()
 	};
 	this.moveMinor.magnitude.reverse();
+
+	this.refire = new Timer(0.2);
 
 	this.mouseDragOn = false;
 
@@ -97,6 +101,14 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		this.mouseX += movementX * this.mouseSensitivity;
 		this.mouseY += movementY * this.mouseSensitivity;
+	};
+
+	this.onMouseDown = function () {
+		this.shoot = true;
+	};
+
+	this.onMouseUp = function () {
+		this.shoot = false;
 	};
 
 	this.onKeyDown = function ( event ) {
@@ -134,6 +146,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.update = function( delta ) {
 		if ( this.enabled === false ) return;
 		if ( this.freeze ) return;
+
+		if (this.shoot && floor(this.refire.get())) {
+			console.log('*shooty* *shooty*');
+			this.refire.restart();
+		}
 
 		var position = this.camera.position;
 
@@ -267,21 +284,19 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		}
 	};
 
-	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
+	//
+	//
+	//
 
-	this.domElement.addEventListener( 'mousemove', bind( this, this.onMouseMove ), false );
-	//this.domElement.addEventListener( 'mousedown', bind( this, this.onMouseDown ), false );
-	//this.domElement.addEventListener( 'mouseup'  , bind( this, this.onMouseUp   ), false );
-	this.domElement.addEventListener( 'keydown'  , bind( this, this.onKeyDown   ), false );
-	this.domElement.addEventListener( 'keyup'    , bind( this, this.onKeyUp     ), false );
+	this.domElement.addEventListener('contextmenu', function ( event ) {
+		event.preventDefault();
+	} );
 
-	// TODO why are we defining our own bind function?
-
-	function bind( scope, fn ) {
-		return function () {
-			fn.apply( scope, arguments );
-		};
-	}
+	this.domElement.addEventListener('mousemove', this.onMouseMove.bind(this));
+	this.domElement.addEventListener('mousedown', this.onMouseDown.bind(this));
+	this.domElement.addEventListener('mouseup'  , this.onMouseUp.bind(this)  );
+	this.domElement.addEventListener('keydown'  , this.onKeyDown.bind(this)  );
+	this.domElement.addEventListener('keyup'    , this.onKeyUp.bind(this)    );
 
 	this.handleResize();
 };
