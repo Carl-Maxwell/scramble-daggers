@@ -148,7 +148,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if ( this.freeze ) return;
 
 		if (this.shoot && floor(this.refire.get())) {
-			console.log('*shooty* *shooty*');
+			// console.log('*shooty* *shooty*');
 			this.refire.restart();
 		}
 
@@ -192,15 +192,13 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		//
 
 		// TODO I'd feel better if this used this.camera.rotation.x or the like instead of mouse position
+
 		var theta = THREE.Math.degToRad(this.mouseX);
 		var radius = sqrt( pow(2, this.velocity.x) + pow(2, this.velocity.z) );
-		var right_angle = THREE.Math.degToRad(90);
 
-		var impulse = new Vector3(
-			(cos(theta)*-this.velocity.z + cos(theta+right_angle)*this.velocity.x)*delta,
-			0,
-			(sin(theta)*-this.velocity.z + sin(theta+right_angle)*this.velocity.x)*delta
-		);
+		var impulse = (new Vector3())
+			.setFromTheta(theta, this.velocity.x, this.velocity.z)
+			.multiply(delta);
 
 		var forward = impulse.clone().normalize().multiply(0.07*h("1 block"));
 
@@ -251,6 +249,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		this.lookTarget.x = position.x + h("1 block") * sin( this.phi ) * cos( this.theta );
 		this.lookTarget.y = position.y + h("1 block") * cos( this.phi );
 		this.lookTarget.z = position.z + h("1 block") * sin( this.phi ) * sin( this.theta );
+
+		if (this.bullets && this.bullets.length) this.lookTarget = this.bullets[0];
 
 		this.camera.lookAt( this.lookTarget );
 

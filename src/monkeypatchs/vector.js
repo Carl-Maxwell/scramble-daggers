@@ -59,3 +59,42 @@ Vector3.prototype.subtract = function ( v, w ) {
 
 	return this;
 };
+
+//
+// Helper function for translating from spherical to euclidian coordinates
+//
+
+Vector3.prototype.setFromTheta = function(theta, xFactor, zFactor) {
+	var right_angle = THREE.Math.degToRad(90);
+
+	if (typeof xFactor == "undefined") xFactor = 1.0;
+	if (typeof zFactor == "undefined") zFactor = 1.0;
+
+	return this.set(0, 0, 0).add(new Vector3(
+		cos(theta)*-zFactor + cos(theta+right_angle)*xFactor,
+		0,
+		sin(theta)*-zFactor + sin(theta+right_angle)*xFactor
+	));
+};
+
+//
+// pitch, yaw, roll
+//
+
+// Vector3.prototype.pitch = function(val) {
+// 	if (typeof val != "undefined") return this.x = val;
+//
+// 	return this.x;
+// };
+//
+// Vector3.prototype.yaw = function(val) {
+// 	if (typeof val != "undefined") return this.y = val;
+//
+// 	return this.y;
+// };
+//
+// Vector3.prototype.roll = function(val) {
+// 	if (typeof val != "undefined") return this.z = val;
+//
+// 	return this.z;
+// };

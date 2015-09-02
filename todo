@@ -3,6 +3,7 @@
 better gameplay might be just having the player collect some items from treasure chests
 and like dashing around or something
 
+* check to make sure seed random is taking the seed properly
 * walls blocking the game's edges
 * maybe those walls blocking off the higher areas of the game
 * maybe add minecraft like hills or something

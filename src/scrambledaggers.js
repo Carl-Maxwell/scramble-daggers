@@ -69,7 +69,7 @@ function init() {
 	controls.movementSpeed = 100;
 	controls.lookSpeed = 0.125;
 	controls.lookVertical = true;
-	
+
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2( 0xffffff, 0.00015 );
 
@@ -121,10 +121,6 @@ function init() {
 	stats.domElement.style.position = 'absolute';
 	stats.domElement.style.top = '0px';
 	container.appendChild( stats.domElement );
-
-	//
-	// post processing
-	//
 
 	window.addEventListener( 'resize', onWindowResize, false );
 }
