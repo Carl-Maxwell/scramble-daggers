@@ -125,7 +125,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 			case 81: /*Q*/ this.freeze = !this.freeze; break;
 
-			case 32: /*space*/ this.jump = this.canJump; break;
+			case 32: /*space*/ this.jump = true; break;
 		}
 	};
 
@@ -273,9 +273,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		} else {
 			this.camera.position.y = verticalPosition;
 
-			if (this.jump) {
+			if (this.jump && this.canJump) {
 				this.velocity.y += h("3 blocks") + gravity * 0.2;
-				this.jump = false;
 				this.canJump = false;
 			} else {
 				this.velocity.y = 0;
