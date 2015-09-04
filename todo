@@ -3,30 +3,32 @@
 better gameplay might be just having the player collect some items from treasure chests
 and like dashing around or something
 
-* check to make sure seed random is taking the seed properly
+* gimbal lock issue
+  => maybe replace all references to .rotation to .quaternion
 * walls blocking the game's edges
 * maybe those walls blocking off the higher areas of the game
-* maybe add minecraft like hills or something
 * a goal?
+* bugs
+  * A and D (strafing) are not working
 * entities
-* enemies?
-* shooting at enemies?
-* enemies dying?
-* treasure chests?
+  * enemies?
+    * shooting at enemies?
+    * enemies dying?
+  * treasure chests?
 * a menu
-* controlling the game seed
-* A and D (strafing) are not working
+  * controlling the game seed
 * instruct the user to use the keys
   * when they discover an enemy, instruct them in the ways of survival and victory
 * sliding colissions
   * (realtime sliding collision restitution)
 * have an end for the game, 
-* landing animation
-* 'head bobbing' style animation
-* screenshake!
+* juice
+  * landing animation
+  * 'head bobbing' style animation
+  * screenshake!
+  * explosions!
+  * particles!
 * maybe provide like a 'dash forward' command (right click or shift or something)
-* explosions!
-* particles!
 
 * there was a problem where the pointerlock code fired before the game stuff was created
   => not sure how to make it happen in the proper sequence
