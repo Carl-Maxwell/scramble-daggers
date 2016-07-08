@@ -3,8 +3,11 @@
 better gameplay might be just having the player collect some items from treasure chests
 and like dashing around or something
 
+* there's an issue where as soon as you start the game the camera rotates straight up and 
+then sticks in that orientation. possibly related to teh gymbal lock issues
+
 * gimbal lock issue
-  => maybe replace all references to .rotation to .quaternion
+  => maybe replace all references to .rotation with .quaternion
 * walls blocking the game's edges
 * maybe those walls blocking off the higher areas of the game
 * a goal?
