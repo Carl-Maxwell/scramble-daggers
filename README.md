@@ -4,7 +4,7 @@ Scrambledaggers
 A minecraft-style javascript WebGL game, built out of one of the *three.js*
 examples.
 
-[Live example](carlmaxwell.ninja/scramble-daggers/)
+[Live example](http://carlmaxwell.ninja/scramble-daggers/)
 
 ## Running it locally
 
